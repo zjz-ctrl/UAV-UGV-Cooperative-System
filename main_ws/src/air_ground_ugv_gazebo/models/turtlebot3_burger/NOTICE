@@ -1,0 +1,8 @@
+This model is derived from the TurtleBot3 Burger Gazebo model in
+ROBOTIS-GIT/turtlebot3_simulations, tag 1.3.2.
+
+Copyright ROBOTIS Co., Ltd.
+Licensed under the Apache License, Version 2.0.
+
+The local copy adds the air-ground demo camera, fiducial, differential-drive,
+and relative-observation plugin configuration.

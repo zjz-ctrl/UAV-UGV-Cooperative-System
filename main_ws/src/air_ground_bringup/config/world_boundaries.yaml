@@ -1,0 +1,10 @@
+# Walls copied from PX4-Autopilot/Tools/sitl_gazebo/worlds/ego.world.
+# The PX4 UAV spawns at Gazebo x=-6, so Gazebo world coordinates are shifted
+# by +6 m to render the walls in the MAVROS local iris_0/odom frame.
+frame_id: iris_0/odom
+world_to_uav_odom_translation: [6.0, 0.0, 0.0]
+walls:
+  - {x: -0.295167, y: 9.87536, z: 1.25, yaw: 0.0, size_x: 20.15, size_y: 0.15, size_z: 2.5}
+  - {x: 9.704833, y: -0.12464, z: 1.25, yaw: -1.5708, size_x: 20.15, size_y: 0.15, size_z: 2.5}
+  - {x: -0.295167, y: -10.12464, z: 1.25, yaw: 3.14159, size_x: 20.15, size_y: 0.15, size_z: 2.5}
+  - {x: -10.295167, y: -0.12464, z: 1.25, yaw: 1.5708, size_x: 20.15, size_y: 0.15, size_z: 2.5}

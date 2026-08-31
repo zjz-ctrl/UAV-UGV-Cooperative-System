@@ -1,0 +1,27 @@
+#mybot: #spx: 不要用绝对路径！
+  # Publish all joint states --公布所有--------------------
+  joint_state_controller:
+      type: joint_state_controller/JointStateController
+      publish_rate: 50
+  
+
+  # Position Controllers ---位置控制器-----------------------
+  right_mot_up_position_controller:
+    joint: right_mot_up_joint
+    type: effort_controllers/JointPositionController
+    pid: {p: 10.0, i: 0.01, d: 0.2}
+
+  right_mot_down_position_controller:
+    joint: right_mot_down_joint
+    type: effort_controllers/JointPositionController
+    pid: {p: 10.0, i: 0.01, d: 0.2}
+  
+  left_mot_up_position_controller:
+    joint: left_mot_up_joint
+    type: effort_controllers/JointPositionController
+    pid: {p: 10.0, i: 0.01, d: 0.2}
+
+  left_mot_down_position_controller:
+    joint: left_mot_down_joint
+    type: effort_controllers/JointPositionController
+    pid: {p: 10.0, i: 0.01, d: 0.2}

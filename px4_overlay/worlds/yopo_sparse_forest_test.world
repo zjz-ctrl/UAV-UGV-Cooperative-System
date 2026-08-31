@@ -1,0 +1,159 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="yopo_sparse_forest_safe">
+
+    <physics name="default_physics" default="0" type="ode">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <!-- 第一阶段主障碍：只测试绕开正前方一根树 -->
+    <model name="tree_center">
+      <static>true</static>
+      <pose>1.8 0.0 2.0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>4.0</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>4.0</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.35 0.20 0.08 1</ambient>
+            <diffuse>0.35 0.20 0.08 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 左侧柱子移远，先不要卡死绕行路径 -->
+    <model name="tree_left_front">
+      <static>true</static>
+      <pose>4.5 3.5 2.0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>4.0</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>4.0</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.35 0.20 0.08 1</ambient>
+            <diffuse>0.35 0.20 0.08 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 右侧柱子也移远 -->
+    <model name="tree_right_front">
+      <static>true</static>
+      <pose>4.5 -3.5 2.0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>4.0</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <cylinder>
+              <radius>0.20</radius>
+              <length>4.0</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.35 0.20 0.08 1</ambient>
+            <diffuse>0.35 0.20 0.08 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 远处左右树，先不影响 3m 测试 -->
+    <model name="tree_left_far">
+      <static>true</static>
+      <pose>7.0 3.8 2.0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>4.0</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>4.0</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.35 0.20 0.08 1</ambient>
+            <diffuse>0.35 0.20 0.08 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="tree_right_far">
+      <static>true</static>
+      <pose>7.0 -3.8 2.0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>4.0</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>4.0</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.35 0.20 0.08 1</ambient>
+            <diffuse>0.35 0.20 0.08 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+  </world>
+</sdf>

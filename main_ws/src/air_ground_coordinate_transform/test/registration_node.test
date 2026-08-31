@@ -1,0 +1,162 @@
+<launch>
+  <node pkg="air_ground_coordinate_transform" type="takeoff_registration.py"
+        name="takeoff_registration_test" output="screen">
+    <rosparam command="load" file="$(find air_ground_coordinate_transform)/config/registration.yaml"/>
+    <param name="uav_odom_topic" value="/test/registration/uav_odom"/>
+    <param name="ugv_odom_topic" value="/test/registration/ugv_odom"/>
+    <param name="observation_topic" value="/test/registration/observation"/>
+    <param name="uav_odom_input_parent_frame" value="test_uav_input_odom"/>
+    <param name="uav_odom_input_child_frame" value="test_uav_input_base"/>
+    <param name="ugv_odom_input_parent_frame" value="test_ugv_input_odom"/>
+    <param name="ugv_odom_input_child_frame" value="test_ugv_input_base"/>
+    <param name="observation_input_frame" value="test_camera"/>
+    <param name="origin_frame" value="test_origin"/>
+    <param name="uav_odom_frame" value="test_uav_odom"/>
+    <param name="uav_base_frame" value="test_uav_base"/>
+    <param name="ugv_odom_frame" value="test_ugv_odom"/>
+    <param name="nadir_camera_frame" value="test_camera"/>
+    <param name="minimum_origin_samples" value="3"/>
+    <param name="minimum_samples" value="4"/>
+    <param name="sample_period" value="0.01"/>
+    <param name="max_odom_bracket" value="0.20"/>
+    <param name="max_translation_residual" value="0.12"/>
+    <param name="max_yaw_residual" value="0.03"/>
+    <param name="minimum_translation_sigma" value="0.01"/>
+    <param name="minimum_yaw_sigma" value="0.005"/>
+    <param name="align_origin_to_uav_heading" value="false"/>
+    <param name="fixed_origin_yaw" value="0.0"/>
+    <param name="use_visual_frame_yaw" value="true"/>
+    <param name="fixed_frame_yaw" value="0.0"/>
+    <param name="minimum_uav_height" value="1.0"/>
+    <param name="maximum_uav_speed" value="0.10"/>
+    <param name="maximum_uav_angular_speed" value="0.10"/>
+    <param name="maximum_ugv_speed" value="0.03"/>
+    <rosparam param="uav_base_to_camera_translation">[0.0, 0.0, -0.17]</rosparam>
+    <rosparam param="uav_base_to_camera_rpy">[3.141592653589793, 0.0, -1.5707963267948966]</rosparam>
+    <rosparam param="ugv_base_to_board_translation">[-0.3, -0.2, 0.1]</rosparam>
+    <rosparam param="ugv_base_to_board_rpy">[0.0, 0.0, 0.0]</rosparam>
+  </node>
+
+  <node pkg="air_ground_coordinate_transform" type="takeoff_registration.py"
+        name="takeoff_registration_ugv_validation_test" output="screen">
+    <rosparam command="load" file="$(find air_ground_coordinate_transform)/config/registration.yaml"/>
+    <remap from="/air_ground/registration/valid" to="/test/ugv_validation/valid"/>
+    <remap from="/air_ground/registration/frozen" to="/test/ugv_validation/frozen"/>
+    <remap from="/air_ground/registration/status" to="/test/ugv_validation/status"/>
+    <remap from="/air_ground/registration/inlier_count" to="/test/ugv_validation/inlier_count"/>
+    <remap from="/air_ground/registration/estimate" to="/test/ugv_validation/estimate"/>
+    <remap from="/air_ground/registration/revision" to="/test/ugv_validation/revision"/>
+    <remap from="/air_ground/ugv/pose_takeoff" to="/test/ugv_validation/pose_takeoff"/>
+    <param name="uav_odom_topic" value="/test/ugv_validation/uav_odom"/>
+    <param name="ugv_odom_topic" value="/test/ugv_validation/ugv_odom"/>
+    <param name="observation_topic" value="/test/ugv_validation/observation"/>
+    <param name="uav_odom_input_parent_frame" value="test_uav_input_odom"/>
+    <param name="uav_odom_input_child_frame" value="test_uav_input_base"/>
+    <param name="ugv_odom_input_parent_frame" value="test_ugv_input_odom"/>
+    <param name="ugv_odom_input_child_frame" value="test_ugv_input_base"/>
+    <param name="observation_input_frame" value="test_camera"/>
+    <param name="origin_frame" value="test_ugv_validation_origin"/>
+    <param name="uav_odom_frame" value="test_ugv_validation_uav_odom"/>
+    <param name="uav_base_frame" value="test_ugv_validation_uav_base"/>
+    <param name="ugv_odom_frame" value="test_ugv_validation_ugv_odom"/>
+    <param name="minimum_origin_samples" value="3"/>
+    <param name="minimum_samples" value="4"/>
+    <param name="sample_period" value="0.01"/>
+    <param name="max_odom_bracket" value="0.20"/>
+    <param name="max_translation_residual" value="0.12"/>
+    <param name="max_yaw_residual" value="0.03"/>
+    <param name="align_origin_to_uav_heading" value="false"/>
+    <param name="minimum_uav_height" value="1.0"/>
+    <rosparam param="uav_base_to_camera_translation">[0.0, 0.0, 0.0]</rosparam>
+    <rosparam param="uav_base_to_camera_rpy">[0.0, 0.0, 0.0]</rosparam>
+    <rosparam param="ugv_base_to_board_translation">[0.0, 0.0, 0.0]</rosparam>
+    <rosparam param="ugv_base_to_board_rpy">[0.0, 0.0, 0.0]</rosparam>
+  </node>
+
+  <node pkg="air_ground_coordinate_transform" type="takeoff_registration.py"
+        name="takeoff_registration_observation_validation_test" output="screen">
+    <rosparam command="load" file="$(find air_ground_coordinate_transform)/config/registration.yaml"/>
+    <remap from="/air_ground/registration/valid" to="/test/observation_validation/valid"/>
+    <remap from="/air_ground/registration/frozen" to="/test/observation_validation/frozen"/>
+    <remap from="/air_ground/registration/status" to="/test/observation_validation/status"/>
+    <remap from="/air_ground/registration/inlier_count" to="/test/observation_validation/inlier_count"/>
+    <remap from="/air_ground/registration/estimate" to="/test/observation_validation/estimate"/>
+    <remap from="/air_ground/registration/revision" to="/test/observation_validation/revision"/>
+    <remap from="/air_ground/ugv/pose_takeoff" to="/test/observation_validation/pose_takeoff"/>
+    <param name="uav_odom_topic" value="/test/observation_validation/uav_odom"/>
+    <param name="ugv_odom_topic" value="/test/observation_validation/ugv_odom"/>
+    <param name="observation_topic" value="/test/observation_validation/observation"/>
+    <param name="uav_odom_input_parent_frame" value="test_uav_input_odom"/>
+    <param name="uav_odom_input_child_frame" value="test_uav_input_base"/>
+    <param name="ugv_odom_input_parent_frame" value="test_ugv_input_odom"/>
+    <param name="ugv_odom_input_child_frame" value="test_ugv_input_base"/>
+    <param name="observation_input_frame" value="test_camera"/>
+    <param name="origin_frame" value="test_observation_validation_origin"/>
+    <param name="uav_odom_frame" value="test_observation_validation_uav_odom"/>
+    <param name="uav_base_frame" value="test_observation_validation_uav_base"/>
+    <param name="ugv_odom_frame" value="test_observation_validation_ugv_odom"/>
+    <param name="minimum_origin_samples" value="3"/>
+    <param name="minimum_samples" value="4"/>
+    <param name="sample_period" value="0.01"/>
+    <param name="max_odom_bracket" value="0.20"/>
+    <param name="max_translation_residual" value="0.12"/>
+    <param name="max_yaw_residual" value="0.03"/>
+    <param name="align_origin_to_uav_heading" value="false"/>
+    <param name="minimum_uav_height" value="1.0"/>
+    <rosparam param="uav_base_to_camera_translation">[0.0, 0.0, 0.0]</rosparam>
+    <rosparam param="uav_base_to_camera_rpy">[0.0, 0.0, 0.0]</rosparam>
+    <rosparam param="ugv_base_to_board_translation">[0.0, 0.0, 0.0]</rosparam>
+    <rosparam param="ugv_base_to_board_rpy">[0.0, 0.0, 0.0]</rosparam>
+  </node>
+
+  <node pkg="air_ground_coordinate_transform" type="takeoff_registration.py"
+        name="takeoff_registration_repeated_test" output="screen">
+    <rosparam command="load" file="$(find air_ground_coordinate_transform)/config/registration.yaml"/>
+    <remap from="/air_ground/registration/valid" to="/test/repeated/valid"/>
+    <remap from="/air_ground/registration/frozen" to="/test/repeated/frozen"/>
+    <remap from="/air_ground/registration/status" to="/test/repeated/status"/>
+    <remap from="/air_ground/registration/inlier_count" to="/test/repeated/inlier_count"/>
+    <remap from="/air_ground/registration/estimate" to="/test/repeated/estimate"/>
+    <remap from="/air_ground/registration/revision" to="/test/repeated/revision"/>
+    <remap from="/air_ground/registration/innovation" to="/test/repeated/innovation"/>
+    <remap from="/air_ground/ugv/pose_takeoff" to="/test/repeated/pose_takeoff"/>
+    <param name="uav_odom_topic" value="/test/repeated/uav_odom"/>
+    <param name="ugv_odom_topic" value="/test/repeated/ugv_odom"/>
+    <param name="observation_topic" value="/test/repeated/observation"/>
+    <param name="uav_odom_input_parent_frame" value="test_uav_input_odom"/>
+    <param name="uav_odom_input_child_frame" value="test_uav_input_base"/>
+    <param name="ugv_odom_input_parent_frame" value="test_ugv_input_odom"/>
+    <param name="ugv_odom_input_child_frame" value="test_ugv_input_base"/>
+    <param name="observation_input_frame" value="test_camera"/>
+    <param name="origin_frame" value="test_repeated_origin"/>
+    <param name="uav_odom_frame" value="test_repeated_uav_odom"/>
+    <param name="uav_base_frame" value="test_repeated_uav_base"/>
+    <param name="ugv_odom_frame" value="test_repeated_ugv_odom"/>
+    <param name="registration_mode" value="opportunistic"/>
+    <param name="registration_window_seconds" value="2.0"/>
+    <param name="registration_window_max_samples" value="4"/>
+    <param name="degraded_covariance_trace_threshold" value="0.001"/>
+    <param name="translation_time_variance_rate" value="0.01"/>
+    <param name="yaw_time_variance_rate" value="0.001"/>
+    <param name="minimum_origin_samples" value="3"/>
+    <param name="minimum_samples" value="4"/>
+    <param name="sample_period" value="0.01"/>
+    <param name="max_odom_bracket" value="0.20"/>
+    <param name="max_translation_residual" value="0.12"/>
+    <param name="max_yaw_residual" value="0.03"/>
+    <param name="align_origin_to_uav_heading" value="false"/>
+    <param name="fixed_origin_yaw" value="0.0"/>
+    <param name="use_visual_frame_yaw" value="true"/>
+    <param name="minimum_uav_height" value="1.0"/>
+    <param name="maximum_uav_speed" value="0.10"/>
+    <param name="maximum_uav_angular_speed" value="0.10"/>
+    <param name="maximum_ugv_speed" value="0.03"/>
+    <rosparam param="uav_base_to_camera_translation">[0.0, 0.0, -0.17]</rosparam>
+    <rosparam param="uav_base_to_camera_rpy">[3.141592653589793, 0.0, -1.5707963267948966]</rosparam>
+    <rosparam param="ugv_base_to_board_translation">[-0.3, -0.2, 0.1]</rosparam>
+    <rosparam param="ugv_base_to_board_rpy">[0.0, 0.0, 0.0]</rosparam>
+  </node>
+
+  <test test-name="registration_node" pkg="air_ground_coordinate_transform"
+        type="test_registration_node.py" time-limit="45"/>
+</launch>

@@ -1,0 +1,10 @@
+<launch>
+  <arg name="use_visual_frame_yaw" default="true"/>
+  <arg name="registration_mode" default="one_shot"/>
+  <node pkg="air_ground_coordinate_transform" type="takeoff_registration.py"
+        name="takeoff_registration" output="screen">
+    <rosparam command="load" file="$(find air_ground_coordinate_transform)/config/registration.yaml"/>
+    <param name="use_visual_frame_yaw" value="$(arg use_visual_frame_yaw)"/>
+    <param name="registration_mode" value="$(arg registration_mode)"/>
+  </node>
+</launch>

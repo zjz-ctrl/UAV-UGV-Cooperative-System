@@ -1,0 +1,6 @@
+This model is sourced from the PX4 SITL Gazebo models:
+https://github.com/PX4/PX4-SITL_gazebo-classic
+
+The upstream source is distributed under the BSD 3-Clause License.
+The air-ground demo adds ROS control, camera, and fiducial payload configuration
+to model.sdf.

@@ -1,0 +1,91 @@
+<sdf version='1.6'>
+  <model name='treble_box'>
+    <link name='base_link'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>0 -0 0.5 0 -0 0</pose>
+        <mass>375</mass>
+        <inertia>
+          <ixx>78.1249</ixx>
+          <ixy>-2.8912e-17</ixy>
+          <ixz>0</ixz>
+          <iyy>78.1249</iyy>
+          <iyz>3.49835e-15</iyz>
+          <izz>15.6249</izz>
+        </inertia>
+      </inertial>
+      <collision name='base_link_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://treble_box/meshes/base_link.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <collision name='base_link_fixed_joint_lump__double_collision_1'>
+        <pose frame=''>0 0 0.5 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://treble_box/meshes/double.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <collision name='base_link_fixed_joint_lump__treble_collision_2'>
+        <pose frame=''>0 0 1 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://treble_box/meshes/treble.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='base_link_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://treble_box/meshes/base_link.STL</uri>
+          </mesh>
+        </geometry>
+	<material>
+          <script>
+            <uri>__default__</uri>
+            <name>Gazebo/Blue</name>
+            </script>
+        </material>
+      </visual>
+      <visual name='base_link_fixed_joint_lump__double_visual_1'>
+        <pose frame=''>0 0 0.5 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://treble_box/meshes/double.STL</uri>
+          </mesh>
+        </geometry>
+	<material>
+          <script>
+            <uri>__default__</uri>
+            <name>Gazebo/Grey</name>
+            </script>
+        </material>
+      </visual>
+      <visual name='base_link_fixed_joint_lump__treble_visual_2'>
+        <pose frame=''>0 0 1 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://treble_box/meshes/treble.STL</uri>
+          </mesh>
+        </geometry>
+	<material>
+          <script>
+            <uri>__default__</uri>
+            <name>Gazebo/Blue</name>
+            </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

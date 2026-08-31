@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- AprilTag detection + UAV/UGV coordinate merging -->
+    <!-- Usage: roslaunch uav_ugv_coord coord.launch                    -->
+    <!--        roslaunch uav_ugv_coord coord.launch config:=my_env.yaml -->
+
+    <arg name="config" default="$(find uav_ugv_coord)/config/sim.yaml"/>
+
+    <rosparam command="load" file="$(arg config)"/>
+
+    <arg name="tag_only" default="false"/>
+
+    <node pkg="uav_ugv_coord" type="tag_detector_node.py"
+          name="tag_detector" output="screen"/>
+    <node unless="$(arg tag_only)" pkg="uav_ugv_coord" type="coord_merge_node.py"
+          name="coord_merge" output="screen"/>
+</launch>

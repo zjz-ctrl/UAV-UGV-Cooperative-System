@@ -1,0 +1,37 @@
+<launch>
+  <arg name="gui" default="true"/>
+  <arg name="debug" default="false"/>
+  <arg name="verbose" default="false"/>
+  <arg name="paused" default="false"/>
+  <arg name="x" default="-6.0"/>
+  <arg name="y" default="0.0"/>
+  <arg name="yaw" default="0.0"/>
+  <arg name="world" default="$(find mavlink_sitl_gazebo)/worlds/ego.world"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(arg world)"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="debug" value="$(arg debug)"/>
+    <arg name="verbose" value="$(arg verbose)"/>
+    <arg name="paused" value="$(arg paused)"/>
+  </include>
+
+  <group ns="iris_0">
+    <env name="PX4_SIM_MODEL" value="iris"/>
+    <env name="PX4_ESTIMATOR" value="ekf2"/>
+    <node name="sitl_0" pkg="px4" type="px4" output="screen"
+          args="$(find px4)/build/px4_sitl_default/etc -s etc/init.d-posix/rcS -i 0 -w sitl_iris_0 -d"/>
+    <!-- The Iris_D435i SDF already uses TCP port 4560 for SITL instance zero. -->
+    <node name="iris_0_spawn" pkg="gazebo_ros" type="spawn_model" output="screen"
+          args="-sdf -file $(find mavlink_sitl_gazebo)/models/iris_D435i/iris_D435i.sdf -model iris_0 -x $(arg x) -y $(arg y) -z 0 -Y $(arg yaw)"/>
+    <!-- Gazebo publishes images but not this explicit ROS optical-frame TF. -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="nadir_camera_optical_tf"
+          args="0 0 -0.17 0.7071067812 -0.7071067812 0 0 iris_0/base_link iris_0/nadir_camera_optical_frame"/>
+    <include file="$(find mavros)/launch/px4.launch">
+      <arg name="fcu_url" value="udp://:14540@localhost:14580"/>
+      <arg name="gcs_url" value=""/>
+      <arg name="tgt_system" value="1"/>
+      <arg name="tgt_component" value="1"/>
+    </include>
+  </group>
+</launch>

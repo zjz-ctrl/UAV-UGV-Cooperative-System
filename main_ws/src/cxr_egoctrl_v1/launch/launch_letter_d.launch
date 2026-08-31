@@ -1,0 +1,11 @@
+
+<launch>
+    <node pkg="cxr_egoctrl_v1" type="stable_letter_d_node" name="stable_letter_d_node" output="screen">
+        <param name="start_height" value="0.8" />
+        <param name="total_time" value="16.0" />
+        <param name="hover_time" value="3.0" />
+        <param name="vel_scale" value="0.42" />
+        <param name="max_ff_speed" value="0.32" />
+    </node>
+</launch>
+

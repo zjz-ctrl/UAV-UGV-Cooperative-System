@@ -1,0 +1,19 @@
+Panels:
+  - Class: rviz/Displays
+    Name: Displays
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz/Image
+      Enabled: true
+      Name: UAV and UGV Cameras
+      Topic: /air_ground/camera_mosaic
+      Transport Hint: raw
+      Queue Size: 2
+  Global Options:
+    Background Color: 18; 24; 38
+    Fixed Frame: iris_0/odom
+  Name: root
+Window Geometry:
+  Height: 430
+  Width: 1320

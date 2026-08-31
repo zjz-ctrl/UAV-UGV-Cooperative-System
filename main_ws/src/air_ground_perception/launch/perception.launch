@@ -1,0 +1,12 @@
+<launch>
+  <node pkg="air_ground_perception" type="charuco_detector.py" name="charuco_detector" output="screen">
+    <rosparam command="load" file="$(find air_ground_perception)/config/charuco.yaml"/>
+  </node>
+  <node pkg="air_ground_perception" type="red_sphere_detector.py" name="front_red_sphere_detector" output="screen">
+    <param name="point_topic" value="/air_ground/red_sphere/front/camera_point"/>
+    <param name="valid_topic" value="/air_ground/red_sphere/front/valid"/>
+    <param name="minimum_area" value="50"/>
+    <param name="minimum_fit_points" value="30"/>
+  </node>
+  <node pkg="air_ground_perception" type="nadir_red_sphere_detector.py" name="nadir_red_sphere_detector" output="screen"/>
+</launch>

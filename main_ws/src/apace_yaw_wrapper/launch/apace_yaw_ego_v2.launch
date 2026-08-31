@@ -1,0 +1,37 @@
+<launch>
+
+  <!-- 1) 启动你原来的 EGO + 控制链路（这里先占位）
+       你要把下面这一段替换为你现在跑仿真的主 launch（那个能让 /position_cmd 出来的） -->
+
+  <!-- 示例：<include file="$(find main_ws)/launch/xxx.launch"/> -->
+  <!-- <include file="$(find main_ws)/launch/your_main.launch"/> -->
+
+  <!-- 2) 关键：把“原先会发布 /position_cmd 的节点” remap 成 /position_cmd_raw
+       你可以在那个节点的 <node> 里加 remap，也可以在 include 时传 remap（看你现有launch写法）
+       这一步我们下一节教你精准改。 -->
+
+
+  <!-- 3) APACE yaw wrapper：订阅 /position_cmd_raw，发布回 /position_cmd -->
+  <node pkg="apace_yaw_wrapper" type="apace_yaw_wrapper.py" name="apace_yaw_wrapper" output="screen">
+    <param name="cmd_in"  value="/position_cmd_raw"/>
+    <param name="cmd_out" value="/position_cmd"/>
+
+    <!-- 你仿真里的深度/彩色/相机内参话题（你刚刚给我的） -->
+    <param name="color" value="/iris_D435i/realsense/depth_camera/color/image_raw"/>
+    <param name="depth" value="/iris_D435i/realsense/depth_camera/depth/image_raw"/>
+    <param name="camera_info" value="/iris_D435i/realsense/depth_camera/color/camera_info"/>
+
+    <!-- 你的里程计/位姿（你刚刚给我的） -->
+    <param name="pose" value="/mavros/local_position/pose"/>
+
+    <!-- 参数 -->
+    <param name="max_keypoints" value="250"/>
+    <param name="min_valid_points" value="30"/>
+    <param name="yaw_rate_max" value="1.0"/>
+    <param name="lowpass_alpha" value="0.2"/>
+
+    <!-- 深度单位：Gazebo realsense 通常是 32FC1 米，所以先 false -->
+    <param name="depth_unit_mm" value="false"/>
+  </node>
+
+</launch>

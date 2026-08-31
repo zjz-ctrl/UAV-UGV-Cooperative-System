@@ -1,0 +1,13 @@
+<launch>
+  <!-- 你的自定义 ego 控制节点 -->
+  <node pkg="cxr_egoctrl_v1"
+        type="cxr_egoctrl_v1"
+        name="cxr_egoctrl_v1"
+        output="screen">
+
+    <!-- 这两个 remap 是“保险”：避免你代码里订阅相对话题名 show 出命名空间坑 -->
+    <remap from="/position_cmd" to="/position_cmd" />
+    <remap from="/mavros/local_position/odom" to="/mavros/local_position/odom" />
+
+  </node>
+</launch>

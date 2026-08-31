@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>uav_ugv_coord</name>
+  <version>0.1.0</version>
+  <description>
+    UAV-UGV coordinate frame merging via AprilTag relative localization.
+    tag_detector_node: detects AprilTags on the downward camera and outputs
+      tag pose in the camera optical frame.
+    coord_merge_node: fuses both vehicles' odometry with the tag detection to
+      compute T(map_uav -> map_ugv) and publishes it as TF + topics.
+  </description>
+  <maintainer email="ymy@example.com">ymy</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>rospy</depend>
+  <depend>std_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>tf</depend>
+  <depend>tf2_ros</depend>
+  <depend>cv_bridge</depend>
+  <test_depend>python3-nose</test_depend>
+</package>

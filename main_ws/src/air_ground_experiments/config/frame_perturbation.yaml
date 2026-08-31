@@ -1,0 +1,10 @@
+drift_step_seconds: 1.0
+translational_drift_rate: 0.0
+yaw_drift_rate: 0.0
+delay_seconds: 0.0
+delay_jitter_seconds: 0.0
+outlier_probability: 0.0
+outlier_translation_m: 0.0
+outlier_yaw_rad: 0.0
+visibility_windows: [[0.0, 1000000000000.0]]
+visibility_probability: 1.0

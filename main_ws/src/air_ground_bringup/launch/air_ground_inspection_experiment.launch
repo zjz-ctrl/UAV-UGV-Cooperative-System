@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- M1 one-shot registration experiment. The matrix runner supplies every
+       argument explicitly; defaults exist for manual smoke runs only.
+       Topology: raw odometry -> perturbation nodes -> research nodes, and
+       research commands -> position_command_adapter -> PX4/CXR. -->
+  <arg name="registration_mode" default="one_shot"/>
+  <arg name="use_visual_frame_yaw" default="true"/>
+  <arg name="seed" default="1000"/>
+  <arg name="trial_id" default="one_shot-0000"/>
+  <arg name="output_directory"
+       default="/tmp/air_ground_experiments/matrix_one_shot/one_shot-0000"/>
+  <arg name="timeout_seconds" default="180.0"/>
+  <arg name="epoch_seconds" default="0.0"/>
+  <!-- Runtime observation-gate scenario control topic (pass/hide/outlier).
+       Empty keeps the legacy scheduled-config-only gate behavior. -->
+  <arg name="observation_control_topic" default=""/>
+  <arg name="uav_x" default="-3.0"/><arg name="uav_y" default="0.0"/>
+  <arg name="uav_yaw" default="0.0"/>
+  <!-- Spawn separation contract (manual acquisition geometry, verified by
+       test_launch_wiring.test_manual_acquisition_geometry_covers_the_charuco_pattern):
+       separation >= rotor+chassis clearance; registration_dx places the nadir
+       camera over the ChArUco pattern centre at ugv_x - 0.05; the pattern is
+       0.525 x 0.375 m of 7x5 x 0.075 m squares on the UGV roof plane
+       (base_link + [-0.05, 0, +0.115]). -->
+  <arg name="ugv_x" default="-2.0"/><arg name="ugv_y" default="0.0"/>
+  <arg name="ugv_yaw" default="0.0"/>
+  <arg name="registration_dx" default="0.95"/>
+  <arg name="registration_dy" default="0.0"/>
+  <!-- Vertical takeoff / visual-registration hover altitude: >=1.63 m keeps
+       the full pattern inside the 60 deg/46.8 deg FOV with a 0.10 m bias
+       budget and a 0.15 m edge reserve (and clears the 1.2 m height gate). -->
+  <arg name="registration_altitude" default="1.8"/>
+  <!-- Re-registration viewpoint is UGV-relative and semantically distinct
+       from the home-relative initial rendezvous offset above: hover directly
+       over the board centre in the UGV body frame. -->
+  <arg name="reregistration_dx" default="-0.05"/>
+  <arg name="reregistration_dy" default="0.0"/>
+  <arg name="uncertainty_aware_handoff" default="false"/>
+  <arg name="inspection_radius" default="0.35"/>
+  <arg name="inspection_yaw" default="0.03490658503988659"/>
+  <arg name="target_sigma_floor" default="0.02"/>
+  <arg name="reregistration_timeout" default="60.0"/>
+  <arg name="red_sphere_x" default="-17.6"/><arg name="red_sphere_y" default="0.0"/>
+  <arg name="red_sphere_z" default="0.25"/>
+  <arg name="uav_initial_xyyaw" default="[0.0, 0.0, 0.0]"/>
+  <arg name="ugv_initial_xyyaw" default="[0.0, 0.0, 0.0]"/>
+  <arg name="translational_drift_rate" default="0.0"/>
+  <arg name="yaw_drift_rate" default="0.0"/>
+  <arg name="drift_step_seconds" default="1.0"/>
+
+  <param name="use_sim_time" value="true"/>
+
+  <!-- Raw simulation stack: Gazebo, PX4 SITL, mavros, UGV spawn. -->
+  <include file="$(find air_ground_bringup)/launch/uav_sitl.launch">
+    <arg name="gui" value="false"/>
+    <arg name="x" value="$(arg uav_x)"/>
+    <arg name="y" value="$(arg uav_y)"/>
+    <arg name="yaw" value="$(arg uav_yaw)"/>
+  </include>
+  <include file="$(find air_ground_ugv_gazebo)/launch/spawn_ugv.launch">
+    <arg name="x" value="$(arg ugv_x)"/>
+    <arg name="y" value="$(arg ugv_y)"/>
+    <arg name="yaw" value="$(arg ugv_yaw)"/>
+  </include>
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_red_sphere" output="screen"
+        args="-sdf -file $(find air_ground_ugv_gazebo)/models/red_sphere/model.sdf -model red_sphere -x $(arg red_sphere_x) -y $(arg red_sphere_y) -z $(arg red_sphere_z)"/>
+
+  <!-- Raw perception feeds the observation gate and mission detectors. -->
+  <include file="$(find air_ground_perception)/launch/perception.launch"/>
+
+  <!-- Perturbation between raw odometry/observations and research nodes;
+       includes the evaluation-only recorder (the trial evaluator). -->
+  <include file="$(find air_ground_experiments)/launch/frame_perturbation.launch">
+    <arg name="seed" value="$(arg seed)"/>
+    <arg name="uav_initial_xyyaw" value="$(arg uav_initial_xyyaw)"/>
+    <arg name="ugv_initial_xyyaw" value="$(arg ugv_initial_xyyaw)"/>
+    <arg name="translational_drift_rate" value="$(arg translational_drift_rate)"/>
+    <arg name="yaw_drift_rate" value="$(arg yaw_drift_rate)"/>
+    <arg name="drift_step_seconds" value="$(arg drift_step_seconds)"/>
+    <arg name="epoch_seconds" value="$(arg epoch_seconds)"/>
+    <arg name="output_directory" value="$(arg output_directory)"/>
+    <arg name="trial_id" value="$(arg trial_id)"/>
+    <arg name="timeout_seconds" value="$(arg timeout_seconds)"/>
+    <arg name="observation_control_topic" value="$(arg observation_control_topic)"/>
+  </include>
+
+  <!-- Registration research node: consumes and publishes the explicit
+       experimental-frame contracts produced by frame_perturbation.launch. -->
+  <node pkg="air_ground_coordinate_transform" type="takeoff_registration.py"
+        name="takeoff_registration" output="screen">
+    <rosparam command="load"
+              file="$(find air_ground_coordinate_transform)/config/registration.yaml"/>
+    <param name="uav_odom_topic" value="/air_ground_experiment/uav/odom"/>
+    <param name="ugv_odom_topic" value="/air_ground_experiment/ugv/odom"/>
+    <param name="observation_topic" value="/air_ground_experiment/charuco/observation"/>
+    <param name="uav_odom_input_parent_frame" value="air_ground_experiment/uav_odom"/>
+    <param name="uav_odom_input_child_frame" value="air_ground_experiment/uav_odom"/>
+    <param name="ugv_odom_input_parent_frame" value="air_ground_experiment/ugv_odom"/>
+    <param name="ugv_odom_input_child_frame" value="ugv_0/base_link"/>
+    <param name="uav_odom_frame" value="air_ground_experiment/uav_odom"/>
+    <param name="ugv_odom_frame" value="air_ground_experiment/ugv_odom"/>
+    <param name="use_visual_frame_yaw" value="$(arg use_visual_frame_yaw)"/>
+    <param name="registration_mode" value="$(arg registration_mode)"/>
+  </node>
+
+  <!-- Mission runs entirely in the injected experiment frames: its odometry
+       inputs are the perturbed streams and its position commands are routed
+       through the adapter back into the raw source frame for CXR/PX4. -->
+  <node pkg="air_ground_bringup" type="uav_sphere_mission.py"
+        name="uav_sphere_mission" output="screen" required="true">
+    <remap from="/iris_0/mavros/local_position/odom"
+            to="/air_ground_experiment/uav/odom"/>
+    <remap from="/ugv_0/odom" to="/air_ground_experiment/ugv/odom"/>
+    <remap from="/iris_0/position_cmd"
+            to="/air_ground_experiment/iris_0/position_cmd"/>
+    <param name="front_camera_pitch" value="0.436332313"/>
+    <param name="scan_altitude" value="4.0"/>
+    <param name="approach_altitude" value="3.0"/>
+    <param name="center_altitude" value="2.3"/>
+    <param name="overwatch_altitude" value="4.0"/>
+    <param name="front_approach_standoff" value="3.5"/>
+    <param name="registration_dx" value="$(arg registration_dx)"/>
+    <param name="registration_dy" value="$(arg registration_dy)"/>
+    <param name="registration_altitude" value="$(arg registration_altitude)"/>
+    <param name="reregistration_dx" value="$(arg reregistration_dx)"/>
+    <param name="reregistration_dy" value="$(arg reregistration_dy)"/>
+    <param name="uav_odom_frame" value="air_ground_experiment/uav_odom"/>
+    <param name="ugv_odom_frame" value="air_ground_experiment/ugv_odom"/>
+    <param name="uncertainty_aware_handoff" value="$(arg uncertainty_aware_handoff)"/>
+    <param name="inspection_radius" value="$(arg inspection_radius)"/>
+    <param name="inspection_yaw" value="$(arg inspection_yaw)"/>
+    <param name="target_sigma_floor" value="$(arg target_sigma_floor)"/>
+    <param name="reregistration_timeout" value="$(arg reregistration_timeout)"/>
+  </node>
+
+  <!-- Automatic takeoff also operates on the experiment stream and routes its
+       commands through the adapter. -->
+  <group ns="iris_0">
+    <node pkg="air_ground_bringup" type="auto_takeoff_trigger.py"
+          name="auto_takeoff_trigger" output="screen">
+      <remap from="position_cmd" to="/air_ground_experiment/iris_0/position_cmd"/>
+      <remap from="mavros/local_position/odom" to="/air_ground_experiment/uav/odom"/>
+    </node>
+    <node pkg="cxr_egoctrl_v1" type="cxr_egoctrl_v1" name="cxr_egoctrl"
+          output="screen"/>
+  </group>
+
+  <!-- UGV control consumes the perturbed odometry/goal contract while its
+       body-frame cmd_vel output remains valid on the raw actuator topic. -->
+  <node pkg="air_ground_bringup" type="ugv_goal_controller.py"
+        name="ugv_goal_controller" output="screen" required="true">
+    <param name="odom_topic" value="/air_ground_experiment/ugv/odom"/>
+    <param name="odom_frame" value="air_ground_experiment/ugv_odom"/>
+  </node>
+  <node pkg="air_ground_bringup" type="ugv_coordinate_monitor.py"
+        name="ugv_coordinate_monitor" output="screen">
+    <param name="odom_topic" value="/air_ground_experiment/ugv/odom"/>
+  </node>
+</launch>

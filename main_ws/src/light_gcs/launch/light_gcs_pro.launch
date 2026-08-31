@@ -1,0 +1,53 @@
+<launch>
+    <!-- GAZEBO / REAL -->
+    <arg name="run_mode" default="GAZEBO"/>
+
+    <!-- 默认仿真视频流 -->
+    <arg name="video_topic_1" default="/iris_D435i/realsense/depth_camera/color/image_raw"/>
+    <arg name="video_topic_2" default="/iris_D435i/realsense/depth_camera/depth/image_raw"/>
+
+    <arg name="logo_path" default="$(find light_gcs)/resources/logo.png"/>
+
+    <arg name="cmd_topic" default="/position_cmd"/>
+
+    <arg name="takeoff_pkg" default="cxr_egoctrl_v1"/>
+    <arg name="takeoff_script" default="auto_takeoff_poscmd.py"/>
+
+    <arg name="takeoff_height" default="1.0"/>
+    <arg name="takeoff_time" default="6.0"/>
+    <arg name="takeoff_auto_arm" default="true"/>
+
+    <arg name="fig8_amp_x" default="0.6"/>
+    <arg name="fig8_amp_y" default="0.6"/>
+    <arg name="fig8_period" default="18.0"/>
+
+    <arg name="manual_keepalive_rate" default="20.0"/>
+
+    <node pkg="light_gcs"
+          type="light_gcs_pro.py"
+          name="light_gcs_pro"
+          output="screen">
+
+        <param name="run_mode" value="$(arg run_mode)"/>
+
+        <param name="video_topic_1" value="$(arg video_topic_1)"/>
+        <param name="video_topic_2" value="$(arg video_topic_2)"/>
+        <param name="logo_path" value="$(arg logo_path)"/>
+
+        <param name="cmd_topic" value="$(arg cmd_topic)"/>
+
+        <param name="takeoff_pkg" value="$(arg takeoff_pkg)"/>
+        <param name="takeoff_script" value="$(arg takeoff_script)"/>
+
+        <param name="takeoff_height" value="$(arg takeoff_height)"/>
+        <param name="takeoff_time" value="$(arg takeoff_time)"/>
+        <param name="takeoff_auto_arm" value="$(arg takeoff_auto_arm)"/>
+
+        <param name="fig8_amp_x" value="$(arg fig8_amp_x)"/>
+        <param name="fig8_amp_y" value="$(arg fig8_amp_y)"/>
+        <param name="fig8_period" value="$(arg fig8_period)"/>
+
+        <param name="manual_keepalive_rate" value="$(arg manual_keepalive_rate)"/>
+        <param name="publish_rate" value="30.0"/>
+    </node>
+</launch>

@@ -1,0 +1,50 @@
+# ============================================================
+# UAV-UGV coordinate merging configuration
+# 换环境/换平台时只需要修改这个文件，不需要动代码。
+# ============================================================
+
+tag_detector:
+  # 相机图像与内参话题（换相机就改这两行）
+  image_topic: /iris_downcam0/down_cam/image_raw
+  camera_info_topic: /iris_downcam0/down_cam/camera_info
+
+  # 标签族 / 检测黑框边长(m) / 目标标签ID（-1 = 任意）
+  tag_family: tag36h11
+  # 0.5m 贴图平面中黑框占 1200/1560，实际边长为 0.384615m。
+  tag_size: 0.3846153846
+  tag_id: 0
+
+  # 相机光学系名称（发布TF用）
+  camera_frame: down_cam_optical_frame
+
+  # 检测频率上限(Hz)，0=不限
+  max_rate: 15.0
+  # 图像降采样因子（1.5 提速，1.0 最准）
+  quad_decimate: 1.5
+
+coord_merge:
+  # 两台车的里程计话题（mavros 命名空间变了就改这里）
+  odom_uav_topic: /uav0/mavros/local_position/odom
+  odom_ugv_topic: /ugv1/mavros/local_position/odom
+  tag_pose_topic: /tag_detector/tag_pose
+
+  # 坐标系命名。真机上无人机和无人车各自的 map/base 名字不同时改这里
+  map_uav_frame: map_uav
+  base_uav_frame: base_uav
+  map_ugv_frame: map_ugv
+  base_ugv_frame: base_ugv
+
+  # 外参1：相机光学系在 UAV FLU 机体系中的位姿 (xyz + rpy)。
+  # 模型中相机正对下方：optical +z -> body -z，optical +x -> body -y。
+  cam_xyz: [0.0, 0.0, -0.17]
+  cam_rpy: [3.1415926536, 0.0, -1.5707963268]
+
+  # 外参2：pyapriltags 标签系在 UGV FLU 车体系中的位姿。
+  # 顶部贴图的检测坐标系 +z 朝下，且因贴图方向相对车体 yaw=+90°。
+  tag_xyz: [0.0, 0.0, 0.30]
+  tag_rpy: [3.1415926536, 0.0, 1.5707963268]
+
+  # 位姿时间容差(s)：检测时刻与最近里程计样本的最大允许偏差
+  max_pose_age: 0.05
+  # TF 刷新频率(Hz)
+  tf_publish_rate: 10.0

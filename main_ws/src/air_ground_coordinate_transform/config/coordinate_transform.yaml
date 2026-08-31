@@ -1,0 +1,26 @@
+uav_odom_topic: /iris_0/mavros/local_position/odom
+ugv_odom_topic: /ugv_0/odom
+observation_topic: /iris_0/ugv_observation
+
+uav_odom_frame: iris_0/odom
+uav_base_frame: iris_0/base_link
+camera_frame: iris_0/camera_link
+ugv_odom_frame: ugv_0/odom
+ugv_base_frame: ugv_0/base_link
+ugv_marker_frame: ugv_0/fiducial
+ugv_camera_frame: ugv_0/camera_link
+
+# Fixed geometry of the existing Iris_D435i model and the MVP UGV marker.
+uav_base_to_camera_translation: [0.12, 0.0, 0.015]
+uav_base_to_camera_rpy: [0.0, 0.0, 0.0]
+ugv_base_to_marker_translation: [0.18, 0.0, 0.26]
+ugv_base_to_marker_rpy: [0.0, 0.0, 0.0]
+ugv_base_to_camera_translation: [0.30, 0.0, 0.22]
+ugv_base_to_camera_rpy: [0.0, 0.0, 0.0]
+
+sync_slop_sec: 0.10
+minimum_observations: 20
+max_observation_distance_m: 8.0
+max_sample_translation_error_m: 0.50
+max_sample_rotation_error_rad: 0.35
+publish_rate_hz: 20.0

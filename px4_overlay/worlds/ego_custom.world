@@ -1,0 +1,582 @@
+<sdf version='1.6'>
+  <world name='default'>
+
+
+    <light name='sun' type='directional'>
+      <cast_shadows>0</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <physics name='default_physics' default='1' type='ode'>
+      <max_step_size>0.004</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>250</real_time_update_rate>
+    </physics>
+
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>0</shadows>
+    </scene>
+
+    <gravity>0 0 -9.8</gravity>
+
+    <!-- 外层大地面（灰） -->
+    <model name='ground_plane'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>200 200</size>
+            </plane>
+          </geometry>
+        </collision>
+        <visual name='visual'>
+          <cast_shadows>0</cast_shadows>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>200 200</size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 围墙内“VINS友好地面”：浅灰底（混凝土感） -->
+    <model name='vins_floor'>
+      <static>1</static>
+      <!-- 抬高一点点避免 z-fighting -->
+      <pose>0 0 0.015 0 0 0</pose>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry><box><size>38 38 0.02</size></box></geometry>
+        </collision>
+        <visual name='visual'>
+          <cast_shadows>0</cast_shadows>
+          <geometry><box><size>38 38 0.02</size></box></geometry>
+          <material>
+            <!-- 浅灰，不要太白，避免过曝；也不要纯色蓝那样缺特征 -->
+            <ambient>0.82 0.82 0.82 1</ambient>
+            <diffuse>0.78 0.78 0.78 1</diffuse>
+            <specular>0.02 0.02 0.02 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 地面网格线：强对比特征（对VINS/SLAM很关键） -->
+    <!-- 用一整个 model 放多条 link，性能比放几十个 model 更好 -->
+    <model name='floor_grid_lines'>
+      <static>1</static>
+
+      <!-- 线条厚度/高度（越薄越像贴地涂装） -->
+      <!-- 这里线宽 0.06m，高 0.01m，抬到 z=0.03 -->
+      <!-- X方向长线（平行X轴，改变y位置） -->
+      <link name='xline_y_-16'>
+        <pose>0 -16 0.03 0 0 0</pose>
+        <collision name='c'><geometry><box><size>38 0.06 0.01</size></box></geometry></collision>
+        <visual name='v'><geometry><box><size>38 0.06 0.01</size></box></geometry>
+          <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.05 0.05 0.05 1</diffuse></material>
+        </visual>
+      </link>
+      <link name='xline_y_-12'>
+        <pose>0 -12 0.03 0 0 0</pose>
+        <collision name='c'><geometry><box><size>38 0.06 0.01</size></box></geometry></collision>
+        <visual name='v'><geometry><box><size>38 0.06 0.01</size></box></geometry>
+          <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.05 0.05 0.05 1</diffuse></material>
+        </visual>
+      </link>
+      <link name='xline_y_-8'>
+        <pose>0 -8 0.03 0 0 0</pose>
+        <collision name='c'><geometry><box><size>38 0.06 0.01</size></box></geometry></collision>
+        <visual name='v'><geometry><box><size>38 0.06 0.01</size></box></geometry>
+          <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.05 0.05 0.05 1</diffuse></material>
+        </visual>
+      </link>
+      <link name='xline_y_-4'>
+        <pose>0 -4 0.03 0 0 0</pose>
+        <collision name='c'><geometry><box><size>38 0.06 0.01</size></box></geometry></collision>
+        <visual name='v'><geometry><box><size>38 0.06 0.01</size></box></geometry>
+          <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.05 0.05 0.05 1</diffuse></material>
+        </visual>
+      </link>
+      <link name='xline_y_0'>
+        <pose>0 0 0.03 0 0 0</pose>
+        <collision name='c'><geometry><box><size>38 0.08 0.012</size></box></geometry></collision>
+        <visual name='v'><geometry><box><size>38 0.08 0.012</size></box></geometry>
+          <!-- 中心线稍宽 -->
+          <material><ambient>0.02 0.02 0.02 1</ambient><diffuse>0.02 0.02 0.02 1</diffuse></material>
+        </visual>
+      </link>
+      <link name='xline_y_4'>
+        <pose>0 4 0.03 0 0 0</pose>
+        <collision name='c'><geometry><box><size>38 0.06 0.01</size></box></geometry></collision>
+        <visual name='v'><geometry><box><size>38 0.06 0.01</size></box></geometry>
+          <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.05 0.05 0.05 1</diffuse></material>
+        </visual>
+      </link>
+      <link name='xline_y_8'>
+        <pose>0 8 0.03 0 0 0</pose>
+        <collision name='c'><geometry><box><size>38 0.06 0.01</size></box></geometry></collision>
+        <visual name='v'><geometry><box><size>38 0.06 0.01</size></box></geometry>
+          <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.05 0.05 0.05 1</diffuse></material>
+        </visual>
+      </link>
+      <link name='xline_y_12'>
+        <pose>0 12 0.03 0 0 0</pose>
+        <collision name='c'><geometry><box><size>38 0.06 0.01</size></box></geometry></collision>
+        <visual name='v'><geometry><box><size>38 0.06 0.01</size></box></geometry>
+          <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.05 0.05 0.05 1</diffuse></material>
+        </visual>
+      </link>
+      <link name='xline_y_16'>
+        <pose>0 16 0.03 0 0 0</pose>
+        <collision name='c'><geometry><box><size>38 0.06 0.01</size></box></geometry></collision>
+        <visual name='v'><geometry><box><size>38 0.06 0.01</size></box></geometry>
+          <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.05 0.05 0.05 1</diffuse></material>
+        </visual>
+      </link>
+
+      <!-- Y方向长线（平行Y轴，改变x位置） -->
+      <link name='yline_x_-16'>
+        <pose>-16 0 0.03 0 0 0</pose>
+        <collision name='c'><geometry><box><size>0.06 38 0.01</size></box></geometry></collision>
+        <visual name='v'><geometry><box><size>0.06 38 0.01</size></box></geometry>
+          <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.05 0.05 0.05 1</diffuse></material>
+        </visual>
+      </link>
+      <link name='yline_x_-12'>
+        <pose>-12 0 0.03 0 0 0</pose>
+        <collision name='c'><geometry><box><size>0.06 38 0.01</size></box></geometry></collision>
+        <visual name='v'><geometry><box><size>0.06 38 0.01</size></box></geometry>
+          <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.05 0.05 0.05 1</diffuse></material>
+        </visual>
+      </link>
+      <link name='yline_x_-8'>
+        <pose>-8 0 0.03 0 0 0</pose>
+        <collision name='c'><geometry><box><size>0.06 38 0.01</size></box></geometry></collision>
+        <visual name='v'><geometry><box><size>0.06 38 0.01</size></box></geometry>
+          <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.05 0.05 0.05 1</diffuse></material>
+        </visual>
+      </link>
+      <link name='yline_x_-4'>
+        <pose>-4 0 0.03 0 0 0</pose>
+        <collision name='c'><geometry><box><size>0.06 38 0.01</size></box></geometry></collision>
+        <visual name='v'><geometry><box><size>0.06 38 0.01</size></box></geometry>
+          <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.05 0.05 0.05 1</diffuse></material>
+        </visual>
+      </link>
+      <link name='yline_x_0'>
+        <pose>0 0 0.03 0 0 0</pose>
+        <collision name='c'><geometry><box><size>0.08 38 0.012</size></box></geometry></collision>
+        <visual name='v'><geometry><box><size>0.08 38 0.012</size></box></geometry>
+          <material><ambient>0.02 0.02 0.02 1</ambient><diffuse>0.02 0.02 0.02 1</diffuse></material>
+        </visual>
+      </link>
+      <link name='yline_x_4'>
+        <pose>4 0 0.03 0 0 0</pose>
+        <collision name='c'><geometry><box><size>0.06 38 0.01</size></box></geometry></collision>
+        <visual name='v'><geometry><box><size>0.06 38 0.01</size></box></geometry>
+          <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.05 0.05 0.05 1</diffuse></material>
+        </visual>
+      </link>
+      <link name='yline_x_8'>
+        <pose>8 0 0.03 0 0 0</pose>
+        <collision name='c'><geometry><box><size>0.06 38 0.01</size></box></geometry></collision>
+        <visual name='v'><geometry><box><size>0.06 38 0.01</size></box></geometry>
+          <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.05 0.05 0.05 1</diffuse></material>
+        </visual>
+      </link>
+      <link name='yline_x_12'>
+        <pose>12 0 0.03 0 0 0</pose>
+        <collision name='c'><geometry><box><size>0.06 38 0.01</size></box></geometry></collision>
+        <visual name='v'><geometry><box><size>0.06 38 0.01</size></box></geometry>
+          <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.05 0.05 0.05 1</diffuse></material>
+        </visual>
+      </link>
+      <link name='yline_x_16'>
+        <pose>16 0 0.03 0 0 0</pose>
+        <collision name='c'><geometry><box><size>0.06 38 0.01</size></box></geometry></collision>
+        <visual name='v'><geometry><box><size>0.06 38 0.01</size></box></geometry>
+          <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.05 0.05 0.05 1</diffuse></material>
+        </visual>
+      </link>
+
+    </model>
+
+    <!-- 少量高对比“标记块”（像地贴/标志），增强近地纹理与角点 -->
+    <model name='floor_markers'>
+      <static>1</static>
+
+      <link name='m1'>
+        <pose>6 -6 0.031 0 0 0</pose>
+        <collision name='c'><geometry><box><size>1.2 1.2 0.01</size></box></geometry></collision>
+        <visual name='v'><geometry><box><size>1.2 1.2 0.01</size></box></geometry>
+          <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material>
+        </visual>
+      </link>
+
+      <link name='m2'>
+        <pose>6.35 -5.65 0.032 0 0 0</pose>
+        <collision name='c'><geometry><box><size>0.5 0.5 0.01</size></box></geometry></collision>
+        <visual name='v'><geometry><box><size>0.5 0.5 0.01</size></box></geometry>
+          <material><ambient>0 0 0 1</ambient><diffuse>0 0 0 1</diffuse></material>
+        </visual>
+      </link>
+
+      <link name='m3'>
+        <pose>-6 6 0.031 0 0 0</pose>
+        <collision name='c'><geometry><box><size>1.2 1.2 0.01</size></box></geometry></collision>
+        <visual name='v'><geometry><box><size>1.2 1.2 0.01</size></box></geometry>
+          <material><ambient>1 0.9 0.2 1</ambient><diffuse>1 0.9 0.2 1</diffuse></material>
+        </visual>
+      </link>
+
+      <link name='m4'>
+        <pose>-5.7 6.3 0.032 0 0 0</pose>
+        <collision name='c'><geometry><box><size>0.5 0.5 0.01</size></box></geometry></collision>
+        <visual name='v'><geometry><box><size>0.5 0.5 0.01</size></box></geometry>
+          <material><ambient>0 0 0 1</ambient><diffuse>0 0 0 1</diffuse></material>
+        </visual>
+      </link>
+
+    </model>
+
+    <!-- 围墙：40x40，中心在(0,0)，墙高2.5 -->
+    <model name='walls'>
+      <static>1</static>
+
+      <!-- 北墙 y=+20 -->
+      <link name='wall_n'>
+        <pose>0 20 1.25 0 0 0</pose>
+        <collision name='collision'>
+          <geometry><box><size>40.2 0.2 2.5</size></box></geometry>
+        </collision>
+        <visual name='visual'>
+          <geometry><box><size>40.2 0.2 2.5</size></box></geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Bricks</name>
+            </script>
+          </material>
+        </visual>
+      </link>
+
+      <!-- 南墙 y=-20 -->
+      <link name='wall_s'>
+        <pose>0 -20 1.25 0 0 0</pose>
+        <collision name='collision'>
+          <geometry><box><size>40.2 0.2 2.5</size></box></geometry>
+        </collision>
+        <visual name='visual'>
+          <geometry><box><size>40.2 0.2 2.5</size></box></geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Bricks</name>
+            </script>
+          </material>
+        </visual>
+      </link>
+
+      <!-- 东墙 x=+20 -->
+      <link name='wall_e'>
+        <pose>20 0 1.25 0 0 0</pose>
+        <collision name='collision'>
+          <geometry><box><size>0.2 40.2 2.5</size></box></geometry>
+        </collision>
+        <visual name='visual'>
+          <geometry><box><size>0.2 40.2 2.5</size></box></geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Bricks</name>
+            </script>
+          </material>
+        </visual>
+      </link>
+
+      <!-- 西墙 x=-20 -->
+      <link name='wall_w'>
+        <pose>-20 0 1.25 0 0 0</pose>
+        <collision name='collision'>
+          <geometry><box><size>0.2 40.2 2.5</size></box></geometry>
+        </collision>
+        <visual name='visual'>
+          <geometry><box><size>0.2 40.2 2.5</size></box></geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Bricks</name>
+            </script>
+          </material>
+        </visual>
+      </link>
+
+    </model>
+
+    <!-- ===== 彩色立方体障碍物：全部 box ===== -->
+    <model name='ob_red'>
+      <static>1</static>
+      <pose>6 6 1.5 0 0 0</pose>
+      <link name='link'>
+        <collision name='collision'><geometry><box><size>1 1 3</size></box></geometry></collision>
+        <visual name='visual'>
+          <geometry><box><size>1 1 3</size></box></geometry>
+          <material><ambient>1 0 0 1</ambient><diffuse>1 0 0 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name='ob_green'>
+      <static>1</static>
+      <pose>-6 6 1.5 0 0 0</pose>
+      <link name='link'>
+        <collision name='collision'><geometry><box><size>1 1 3</size></box></geometry></collision>
+        <visual name='visual'>
+          <geometry><box><size>1 1 3</size></box></geometry>
+          <material><ambient>0 1 0 1</ambient><diffuse>0 1 0 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name='ob_yellow'>
+      <static>1</static>
+      <pose>0 8 1.5 0 0 0</pose>
+      <link name='link'>
+        <collision name='collision'><geometry><box><size>1 1 3</size></box></geometry></collision>
+        <visual name='visual'>
+          <geometry><box><size>1 1 3</size></box></geometry>
+          <material><ambient>1 1 0 1</ambient><diffuse>1 1 0 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name='ob_cyan'>
+      <static>1</static>
+      <pose>8 0 1.5 0 0 0</pose>
+      <link name='link'>
+        <collision name='collision'><geometry><box><size>1 1 3</size></box></geometry></collision>
+        <visual name='visual'>
+          <geometry><box><size>1 1 3</size></box></geometry>
+          <material><ambient>0 1 1 1</ambient><diffuse>0 1 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name='ob_magenta'>
+      <static>1</static>
+      <pose>0 -8 1.5 0 0 0</pose>
+      <link name='link'>
+        <collision name='collision'><geometry><box><size>1 1 3</size></box></geometry></collision>
+        <visual name='visual'>
+          <geometry><box><size>1 1 3</size></box></geometry>
+          <material><ambient>1 0 1 1</ambient><diffuse>1 0 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name='ob_orange'>
+      <static>1</static>
+      <pose>-8 0 1.5 0 0 0</pose>
+      <link name='link'>
+        <collision name='collision'><geometry><box><size>1 1 3</size></box></geometry></collision>
+        <visual name='visual'>
+          <geometry><box><size>1 1 3</size></box></geometry>
+          <material><ambient>1 0.5 0 1</ambient><diffuse>1 0.5 0 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 高塔 -->
+    <model name='tower_purple'>
+      <static>1</static>
+      <pose>5 -5 5 0 0 0</pose>
+      <link name='link'>
+        <collision name='collision'><geometry><box><size>0.6 0.6 10</size></box></geometry></collision>
+        <visual name='visual'>
+          <geometry><box><size>0.6 0.6 10</size></box></geometry>
+          <material><ambient>0.6 0.2 1 1</ambient><diffuse>0.6 0.2 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name='tower_teal'>
+      <static>1</static>
+      <pose>-5 -5 5 0 0 0</pose>
+      <link name='link'>
+        <collision name='collision'><geometry><box><size>0.6 0.6 10</size></box></geometry></collision>
+        <visual name='visual'>
+          <geometry><box><size>0.6 0.6 10</size></box></geometry>
+          <material><ambient>0.1 0.8 0.7 1</ambient><diffuse>0.1 0.8 0.7 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ================== Custom Obstacles (static primitives) ================== -->
+
+    <model name='obs_box_red'>
+      <static>1</static>
+      <pose>2 2 0.5 0 0 0</pose>
+      <link name='link'>
+        <collision name='col'><geometry><box><size>1 1 1</size></box></geometry></collision>
+        <visual name='vis'>
+          <geometry><box><size>1 1 1</size></box></geometry>
+          <material>
+            <ambient>1 0.2 0.2 1</ambient>
+            <diffuse>1 0.2 0.2 1</diffuse>
+            <specular>0.05 0.05 0.05 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 你这里仍保留了圆柱/球体/坡道等：用于深度/规划测试也有价值 -->
+    <model name='obs_cyl_green'>
+      <static>1</static>
+      <pose>-2 2 0.6 0 0 0</pose>
+      <link name='link'>
+        <collision name='col'><geometry><cylinder><radius>0.35</radius><length>1.2</length></cylinder></geometry></collision>
+        <visual name='vis'>
+          <geometry><cylinder><radius>0.35</radius><length>1.2</length></cylinder></geometry>
+          <material>
+            <ambient>0.2 1 0.2 1</ambient>
+            <diffuse>0.2 1 0.2 1</diffuse>
+            <specular>0.05 0.05 0.05 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name='obs_sphere_yellow'>
+      <static>1</static>
+      <pose>0 -2 0.5 0 0 0</pose>
+      <link name='link'>
+        <collision name='col'><geometry><sphere><radius>0.5</radius></sphere></geometry></collision>
+        <visual name='vis'>
+          <geometry><sphere><radius>0.5</radius></sphere></geometry>
+          <material>
+            <ambient>1 1 0.2 1</ambient>
+            <diffuse>1 1 0.2 1</diffuse>
+            <specular>0.05 0.05 0.05 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name='obs_panel_purple'>
+      <static>1</static>
+      <pose>4 0 1 0 0 0.6</pose>
+      <link name='link'>
+        <collision name='col'><geometry><box><size>0.15 3.0 2.0</size></box></geometry></collision>
+        <visual name='vis'>
+          <geometry><box><size>0.15 3.0 2.0</size></box></geometry>
+          <material>
+            <ambient>0.7 0.3 1 1</ambient>
+            <diffuse>0.7 0.3 1 1</diffuse>
+            <specular>0.05 0.05 0.05 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name='obs_ramp_orange'>
+      <static>1</static>
+      <pose>-4 0 0.2 0 0.35 0</pose>
+      <link name='link'>
+        <collision name='col'><geometry><box><size>2.0 1.0 0.4</size></box></geometry></collision>
+        <visual name='vis'>
+          <geometry><box><size>2.0 1.0 0.4</size></box></geometry>
+          <material>
+            <ambient>1 0.6 0.2 1</ambient>
+            <diffuse>1 0.6 0.2 1</diffuse>
+            <specular>0.05 0.05 0.05 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name='obs_gate_cyan'>
+      <static>1</static>
+      <pose>0 5 0 0 0 0</pose>
+
+      <link name='left'>
+        <pose>-0.8 0 1 0 0 0</pose>
+        <collision name='col'><geometry><box><size>0.25 0.25 2.0</size></box></geometry></collision>
+        <visual name='vis'>
+          <geometry><box><size>0.25 0.25 2.0</size></box></geometry>
+          <material><ambient>0.2 0.9 1 1</ambient><diffuse>0.2 0.9 1 1</diffuse></material>
+        </visual>
+      </link>
+
+      <link name='right'>
+        <pose>0.8 0 1 0 0 0</pose>
+        <collision name='col'><geometry><box><size>0.25 0.25 2.0</size></box></geometry></collision>
+        <visual name='vis'>
+          <geometry><box><size>0.25 0.25 2.0</size></box></geometry>
+          <material><ambient>0.2 0.9 1 1</ambient><diffuse>0.2 0.9 1 1</diffuse></material>
+        </visual>
+      </link>
+
+      <link name='top'>
+        <pose>0 0 2.1 0 0 0</pose>
+        <collision name='col'><geometry><box><size>2.0 0.25 0.25</size></box></geometry></collision>
+        <visual name='vis'>
+          <geometry><box><size>2.0 0.25 0.25</size></box></geometry>
+          <material><ambient>0.2 0.9 1 1</ambient><diffuse>0.2 0.9 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name='obs_blocks_cluster'>
+      <static>1</static>
+      <pose>-3 -4 0 0 0 0</pose>
+
+      <link name='b1'>
+        <pose>0 0 0.25 0 0 0</pose>
+        <collision name='col'><geometry><box><size>0.6 0.6 0.5</size></box></geometry></collision>
+        <visual name='vis'>
+          <geometry><box><size>0.6 0.6 0.5</size></box></geometry>
+          <material><ambient>0.9 0.2 0.9 1</ambient><diffuse>0.9 0.2 0.9 1</diffuse></material>
+        </visual>
+      </link>
+
+      <link name='b2'>
+        <pose>0.9 0 0.35 0 0 0</pose>
+        <collision name='col'><geometry><box><size>0.6 0.6 0.7</size></box></geometry></collision>
+        <visual name='vis'>
+          <geometry><box><size>0.6 0.6 0.7</size></box></geometry>
+          <material><ambient>0.2 0.9 0.4 1</ambient><diffuse>0.2 0.9 0.4 1</diffuse></material>
+        </visual>
+      </link>
+
+      <link name='b3'>
+        <pose>0.45 0.9 0.5 0 0 0</pose>
+        <collision name='col'><geometry><box><size>0.6 0.6 1.0</size></box></geometry></collision>
+        <visual name='vis'>
+          <geometry><box><size>0.6 0.6 1.0</size></box></geometry>
+          <material><ambient>0.2 0.4 1 1</ambient><diffuse>0.2 0.4 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ================== End Custom Obstacles ================== -->
+
+
+
+
+  </world>
+</sdf>

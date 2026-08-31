@@ -1,0 +1,13 @@
+image_topic: /iris_0/nadir_camera/image_raw
+camera_info_topic: /iris_0/nadir_camera/camera_info
+observation_topic: /air_ground/charuco/observation
+valid_topic: /air_ground/charuco/valid
+debug_topic: /air_ground/charuco/debug_image
+dictionary: DICT_5X5_100
+squares_x: 7
+squares_y: 5
+square_length: 0.075
+marker_length: 0.055
+minimum_markers: 4
+minimum_corners: 12
+maximum_reprojection_error_px: 0.8

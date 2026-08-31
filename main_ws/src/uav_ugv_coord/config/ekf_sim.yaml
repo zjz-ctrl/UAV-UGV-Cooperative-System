@@ -1,0 +1,8 @@
+# EKF2 参数：使用 airspeed + vision（无 GPS）
+# SITL 中不依赖 GPS，用固定原点
+EKF2_AID_MASK: 24        # use vision position + yaw
+EKF2_HGT_MODE: 3         # vision height
+EKF2_EV_DELAY: 0         # no delay
+EKF2_EV_NOISE: 0.1       # vision noise
+GPS_DHPOS_STD_DEV: 100   # disable GPS
+GPS_HPOS_STD_DEV: 100

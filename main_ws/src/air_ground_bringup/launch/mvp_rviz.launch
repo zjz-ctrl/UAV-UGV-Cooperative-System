@@ -1,0 +1,4 @@
+<launch>
+  <node pkg="rviz" type="rviz" name="mvp_rviz"
+        args="-d $(find air_ground_bringup)/rviz/mvp.rviz" output="screen"/>
+</launch>

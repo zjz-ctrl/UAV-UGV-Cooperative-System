@@ -1,0 +1,12 @@
+diff --git a/ROMFS/px4fmu_common/init.d-posix/airframes/CMakeLists.txt b/ROMFS/px4fmu_common/init.d-posix/airframes/CMakeLists.txt
+index fba035b61e..e6c2e6ea96 100644
+--- a/ROMFS/px4fmu_common/init.d-posix/airframes/CMakeLists.txt
++++ b/ROMFS/px4fmu_common/init.d-posix/airframes/CMakeLists.txt
+@@ -37,6 +37,7 @@ px4_add_romfs_files(
+ 	10018_iris_foggy_lidar
+ 	10019_omnicopter
+ 	10020_if750a
++	10023_SDU_UAV
+ 	10030_px4vision
+ 	10040_quadx
+ 	10041_airplane

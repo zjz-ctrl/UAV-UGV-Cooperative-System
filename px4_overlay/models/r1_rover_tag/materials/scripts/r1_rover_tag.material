@@ -1,0 +1,17 @@
+material r1_rover_tag/apriltag_id0
+{
+  technique
+  {
+    pass
+    {
+      ambient 1.0 1.0 1.0 1.0
+      diffuse 1.0 1.0 1.0 1.0
+      specular 0.0 0.0 0.0 1.0
+      texture_unit
+      {
+        texture apriltag_id0.png
+        filtering trilinear
+      }
+    }
+  }
+}

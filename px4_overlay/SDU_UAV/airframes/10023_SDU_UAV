@@ -1,0 +1,46 @@
+#!/bin/sh
+#
+# @name SDU_UAV SITL
+#
+# @type Quadrotor Wide
+#
+# @maintainer ymy <ymy@localhost>
+#
+
+. ${R}etc/init.d/rc.mc_defaults
+
+set MIXER quad_w
+
+# 轻小型机 (0.7kg) 姿态增益调低, 避免悬停振荡
+param set-default MC_ROLLRATE_P 0.04
+param set-default MC_ROLLRATE_I 0.05
+param set-default MC_ROLLRATE_D 0.001
+param set-default MC_PITCHRATE_P 0.04
+param set-default MC_PITCHRATE_I 0.05
+param set-default MC_PITCHRATE_D 0.001
+param set-default MC_YAWRATE_P 0.06
+param set-default MC_YAWRATE_I 0.02
+param set-default MC_ROLL_P 3.0
+param set-default MC_PITCH_P 3.0
+param set-default MC_YAW_P 1.5
+
+# 起飞平缓
+param set-default MPC_TKO_SPEED 0.8
+
+# 位置/速度环: 提高速度环增益+积分(抑制低频摇摆)
+# 注: MPC_XY_VEL_FF 在本版本(v1.13)不存在, 已移除
+param set-default MPC_XY_P 1.2
+param set-default MPC_XY_VEL_P_ACC 2.8
+param set-default MPC_XY_VEL_I_ACC 0.6
+param set-default MPC_XY_CRUISE 2.5
+param set-default MPC_Z_P 1.2
+param set-default MPC_Z_VEL_P_ACC 5.0
+
+# 姿态环: 第一轮验证值
+param set-default MC_ROLL_P 3.0
+param set-default MC_PITCH_P 3.0
+
+# 角速率阻尼恢复
+param set-default MC_ROLLRATE_D 0.003
+param set-default MC_PITCHRATE_D 0.003
+param set-default MC_YAWRATE_D 0.002

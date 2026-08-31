@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="seed" default="17"/>
+  <arg name="uav_initial_xyyaw" default="[0.0, 0.0, 0.0]"/>
+  <arg name="ugv_initial_xyyaw" default="[0.0, 0.0, 0.0]"/>
+  <arg name="translational_drift_rate" default="0.0"/>
+  <arg name="yaw_drift_rate" default="0.0"/>
+  <arg name="drift_step_seconds" default="1.0"/>
+  <arg name="epoch_seconds" default="0.0"/>
+  <arg name="output_directory" default="/tmp/air_ground_experiments"/>
+  <arg name="trial_id" default="m1b-000"/>
+  <!-- Trial budget forwarded to the evaluation-only recorder; keep in sync
+       with the matrix freeze when overriding. -->
+  <arg name="timeout_seconds" default="120.0"/>
+  <!-- Optional runtime scenario-control topic for the observation gate
+       (pass/hide/outlier). Empty disables the control subscription and the
+       gate behaves exactly as the scheduled-config-only baseline. -->
+  <arg name="observation_control_topic" default=""/>
+
+  <node pkg="air_ground_experiments" type="odom_perturbation_node.py" name="uav_odom_perturbation" output="screen">
+    <param name="source_topic" value="/iris_0/mavros/local_position/odom"/>
+    <param name="destination_topic" value="/air_ground_experiment/uav/odom"/>
+    <param name="source_frame" value="map"/>
+    <param name="destination_frame" value="air_ground_experiment/uav_odom"/>
+    <rosparam param="initial_xyyaw" subst_value="true">$(arg uav_initial_xyyaw)</rosparam>
+    <param name="translational_drift_rate" value="$(arg translational_drift_rate)"/>
+    <param name="yaw_drift_rate" value="$(arg yaw_drift_rate)"/>
+    <param name="drift_step_seconds" value="$(arg drift_step_seconds)"/>
+    <param name="seed" value="$(arg seed)"/>
+    <param name="truth_topic" value="/air_ground_experiment/truth/uav_frame"/>
+      <param name="epoch_seconds" value="$(arg epoch_seconds)"/>
+    <param name="seed_domain" value="uav"/>
+    <param name="twist_convention" value="parent"/>
+</node>
+
+  <node pkg="air_ground_experiments" type="odom_perturbation_node.py" name="ugv_odom_perturbation" output="screen">
+    <param name="source_topic" value="/ugv_0/odom"/>
+    <param name="destination_topic" value="/air_ground_experiment/ugv/odom"/>
+    <param name="source_frame" value="ugv_0/odom"/>
+    <param name="destination_frame" value="air_ground_experiment/ugv_odom"/>
+    <rosparam param="initial_xyyaw" subst_value="true">$(arg ugv_initial_xyyaw)</rosparam>
+    <param name="translational_drift_rate" value="$(arg translational_drift_rate)"/>
+    <param name="yaw_drift_rate" value="$(arg yaw_drift_rate)"/>
+    <param name="drift_step_seconds" value="$(arg drift_step_seconds)"/>
+    <param name="seed" value="$(arg seed)"/>
+    <param name="truth_topic" value="/air_ground_experiment/truth/ugv_frame"/>
+      <param name="epoch_seconds" value="$(arg epoch_seconds)"/>
+    <param name="seed_domain" value="ugv"/>
+    <param name="twist_convention" value="body"/>
+</node>
+
+  <node pkg="air_ground_experiments" type="observation_gate.py" name="observation_gate" output="screen">
+    <rosparam command="load" file="$(find air_ground_experiments)/config/frame_perturbation.yaml"/>
+    <param name="source_topic" value="/air_ground/charuco/observation"/>
+    <param name="destination_topic" value="/air_ground_experiment/charuco/observation"/>
+    <param name="diagnostic_topic" value="/air_ground_experiment/charuco/injected_delay"/>
+    <param name="seed" value="$(arg seed)"/>
+      <param name="epoch_seconds" value="$(arg epoch_seconds)"/>
+    <param name="seed_domain" value="gate"/>
+    <param name="control_topic" value="$(arg observation_control_topic)"/>
+</node>
+
+  <node pkg="air_ground_experiments" type="position_command_adapter.py" name="position_command_adapter" output="screen">
+    <param name="source_topic" value="/air_ground_experiment/iris_0/position_cmd"/>
+    <param name="destination_topic" value="/iris_0/position_cmd"/>
+    <param name="destination_frame" value="iris_0/odom"/>
+    <rosparam param="initial_xyyaw" subst_value="true">$(arg uav_initial_xyyaw)</rosparam>
+    <param name="translational_drift_rate" value="$(arg translational_drift_rate)"/>
+    <param name="yaw_drift_rate" value="$(arg yaw_drift_rate)"/>
+    <param name="drift_step_seconds" value="$(arg drift_step_seconds)"/>
+    <param name="seed" value="$(arg seed)"/>
+      <param name="epoch_seconds" value="$(arg epoch_seconds)"/>
+    <param name="seed_domain" value="uav"/>
+</node>
+
+  <node pkg="air_ground_experiments" type="experiment_recorder.py" name="experiment_recorder" output="screen">
+    <param name="trial_id" value="$(arg trial_id)"/>
+    <param name="seed" value="$(arg seed)"/>
+    <param name="output_directory" value="$(arg output_directory)"/>
+      <param name="mission_phase_topic" value="/air_ground/mission_phase"/>
+    <param name="timeout_seconds" value="$(arg timeout_seconds)"/>
+    <param name="anomaly_model" value="red_sphere"/>
+  </node>
+</launch>

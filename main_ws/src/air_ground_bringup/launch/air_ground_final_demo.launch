@@ -1,0 +1,37 @@
+<launch>
+  <arg name="gui" default="true"/><arg name="start_rviz" default="true"/>
+  <arg name="separate_terminals" default="true"/>
+  <arg name="ugv_coordinate_print_rate" default="2.0"/>
+  <arg name="registration_dx" default="1.6"/><arg name="registration_dy" default="0.0"/>
+  <arg name="red_sphere_x" default="-17.6"/><arg name="red_sphere_y" default="0.0"/>
+  <arg name="uav_x" default="-2.6"/><arg name="uav_y" default="0.0"/><arg name="uav_yaw" default="0.0"/>
+  <arg name="ugv_x" default="-1.0"/><arg name="ugv_y" default="0.0"/><arg name="ugv_yaw" default="0.0"/>
+  <include file="$(find air_ground_bringup)/launch/mvp_system.launch">
+    <arg name="gui" value="$(arg gui)"/><arg name="start_ego" value="false"/><arg name="start_cxr" value="true"/>
+    <arg name="cxr_launch_prefix" value="$(eval 'gnome-terminal --title=CXR --wait --' if arg('separate_terminals') else '')"/>
+    <arg name="auto_takeoff" value="false"/><arg name="start_coordinate_transform" value="true"/>
+    <arg name="use_visual_frame_yaw" value="false"/>
+    <arg name="start_world_boundaries" value="false"/><arg name="start_rviz" value="false"/>
+    <arg name="red_sphere_x" value="$(arg red_sphere_x)"/><arg name="red_sphere_y" value="$(arg red_sphere_y)"/>
+    <arg name="uav_x" value="$(arg uav_x)"/><arg name="uav_y" value="$(arg uav_y)"/><arg name="uav_yaw" value="$(arg uav_yaw)"/>
+    <arg name="ugv_x" value="$(arg ugv_x)"/><arg name="ugv_y" value="$(arg ugv_y)"/><arg name="ugv_yaw" value="$(arg ugv_yaw)"/>
+  </include>
+  <include file="$(find air_ground_perception)/launch/perception.launch"/>
+  <node pkg="air_ground_bringup" type="uav_sphere_mission.py" name="uav_sphere_mission" output="screen" required="true">
+    <param name="front_camera_pitch" value="0.436332313"/>
+    <param name="scan_altitude" value="4.0"/>
+    <param name="approach_altitude" value="3.0"/>
+    <param name="center_altitude" value="2.3"/>
+    <param name="overwatch_altitude" value="4.0"/>
+    <param name="front_approach_standoff" value="3.5"/>
+    <param name="registration_dx" value="$(arg registration_dx)"/>
+    <param name="registration_dy" value="$(arg registration_dy)"/>
+    <param name="uncertainty_aware_handoff" value="false"/>
+  </node>
+  <node pkg="air_ground_bringup" type="ugv_coordinate_monitor.py" name="ugv_coordinate_monitor" output="screen"
+        launch-prefix="$(eval 'gnome-terminal --title=UGV_Common_Coordinate --wait --' if arg('separate_terminals') else '')">
+    <param name="print_rate" value="$(arg ugv_coordinate_print_rate)"/>
+  </node>
+  <node pkg="air_ground_bringup" type="ugv_goal_controller.py" name="ugv_goal_controller" output="screen" required="true"/>
+  <node if="$(arg start_rviz)" pkg="rviz" type="rviz" name="air_ground_final_rviz" args="-d $(find air_ground_bringup)/rviz/mvp.rviz" output="screen"/>
+</launch>

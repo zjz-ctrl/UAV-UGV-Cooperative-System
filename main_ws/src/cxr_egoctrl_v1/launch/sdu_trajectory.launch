@@ -1,0 +1,15 @@
+<launch>
+  <!-- SDU Trajectory Node Launch File -->
+  <node pkg="cxr_egoctrl_v1" type="sdu_trajectory_node" name="sdu_trajectory_node" output="screen">
+  
+    <!-- 飞行初始高度 (米) -->
+    <param name="start_height" value="1.2" />
+    
+    <!-- 飞行总时长 (秒)，数字越大飞得越慢、越稳 -->
+    <param name="total_time" value="40.0" />
+    
+    <!-- 起飞后进入轨迹的平滑加速准备时间 (秒) -->
+    <param name="ramp_time" value="3.0" />
+    
+  </node>
+</launch>

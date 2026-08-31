@@ -1,0 +1,18 @@
+material ugv_mvp/charuco_7x5
+{
+  technique
+  {
+    pass
+    {
+      lighting off
+      ambient 1 1 1 1
+      diffuse 1 1 1 1
+      specular 0 0 0 1
+      texture_unit
+      {
+        texture charuco_7x5.png
+        filtering trilinear
+      }
+    }
+  }
+}

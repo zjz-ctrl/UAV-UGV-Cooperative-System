@@ -1,0 +1,299 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <model name="turtlebot3_burger">  
+
+    <link name="base">
+
+      <inertial>
+        <pose>-0.032 0 0.070 0 0 0</pose>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>0.000</ixy>
+          <ixz>0.000</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0.000</iyz>
+          <izz>0.001</izz>
+        </inertia>
+        <mass>1.0</mass>
+      </inertial>
+
+      <collision name="base_collision">
+        <pose>-0.032 0 0.070 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.140 0.140 0.140</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <visual name="base_visual">
+        <pose>-0.032 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://turtlebot3_burger/meshes/burger_base.dae</uri>
+            <scale>0.001 0.001 0.001</scale>
+          </mesh>
+        </geometry>
+      </visual>
+
+      <collision name="caster_collision">
+        <pose>-0.081 0 -0.004 0 0 0</pose>
+        <geometry>
+          <sphere>
+            <radius>0.005000</radius>
+          </sphere>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>100000.0</mu>
+              <mu2>100000.0</mu2>
+              <fdir1>0 0 0</fdir1>
+              <slip1>0</slip1>
+              <slip2>0</slip2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+    </link>
+
+  <link name="lidar">
+    <inertial>
+      <pose>-0.020 0 0.161 0 0 0</pose>
+      <inertia>
+        <ixx>0.001</ixx>
+        <ixy>0.000</ixy>
+        <ixz>0.000</ixz>
+        <iyy>0.001</iyy>
+        <iyz>0.000</iyz>
+        <izz>0.001</izz>
+      </inertia>
+      <mass>0.125</mass>
+    </inertial>
+
+    <collision name="lidar_sensor_collision">
+        <pose>-0.020 0 0.161 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.0508</radius>
+            <length>0.055</length>
+          </cylinder>
+        </geometry>
+      </collision>
+
+      <visual name="lidar_sensor_visual">
+        <pose>-0.032 0 0.171 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://turtlebot3_burger/meshes/lds.dae</uri>
+            <scale>0.001 0.001 0.001</scale>
+          </mesh>
+        </geometry>
+      </visual>
+
+      <sensor name="hls_lfcd_lds" type="ray">
+        <always_on>1</always_on>
+        <visualize>0</visualize>
+        <pose>-0.032 0 0.171 0 0 0</pose>
+        <update_rate>1800</update_rate>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>360</samples>
+              <resolution>1.000000</resolution>
+              <min_angle>0.000000</min_angle>
+              <max_angle>6.280000</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.120000</min>
+            <max>3.5</max>
+            <resolution>0.015000</resolution>
+          </range>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.01</stddev>
+          </noise>
+        </ray>
+      </sensor>
+    </link>
+
+    <link name="left_wheel">
+
+      <inertial>
+        <pose>0 0.08 0.023 -1.57 0 0</pose>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>0.000</ixy>
+          <ixz>0.000</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0.000</iyz>
+          <izz>0.001</izz>
+        </inertia>
+        <mass>0.1</mass>
+      </inertial>
+
+      <collision name="left_wheel_collision">
+        <pose>0 0.08 0.023 -1.57 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.033</radius>
+            <length>0.018</length>
+          </cylinder>
+        </geometry>
+          <surface>
+          <!-- This friction pamareter don't contain reliable data!! -->
+            <friction>
+              <ode>
+                <mu>100000.0</mu>
+                <mu2>100000.0</mu2>
+                <fdir1>0 0 0</fdir1>
+                <slip1>0.0</slip1>
+                <slip2>0.0</slip2>
+              </ode>
+          </friction>
+        </surface>
+      </collision>
+
+      <visual name="left_wheel_visual">
+        <pose>0 0.08 0.023 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://turtlebot3_burger/meshes/tire.dae</uri>
+            <scale>0.001 0.001 0.001</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+    <link name="right_wheel">
+
+      <inertial>
+        <pose>0.0 -0.08 0.023 -1.57 0 0</pose>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>0.000</ixy>
+          <ixz>0.000</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0.000</iyz>
+          <izz>0.001</izz>
+        </inertia>
+        <mass>0.1</mass>
+      </inertial>
+    
+      <collision name="right_wheel_collision">
+        <pose>0.0 -0.08 0.023 -1.57 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.033</radius>
+            <length>0.018</length>
+          </cylinder>
+        </geometry>
+          <surface>
+          <!-- This friction pamareter don't contain reliable data!! -->
+            <friction>
+              <ode>
+                <mu>100000.0</mu>
+                <mu2>100000.0</mu2>
+                <fdir1>0 0 0</fdir1>
+                <slip1>0.0</slip1>
+                <slip2>0.0</slip2>
+              </ode>
+          </friction>
+        </surface>
+      </collision>
+
+      <visual name="right_wheel_visual">
+        <pose>0.0 -0.08 0.023 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://turtlebot3_burger/meshes/tire.dae</uri>
+            <scale>0.001 0.001 0.001</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+    <joint name="left_wheel_joint" type="revolute">
+      <parent>base</parent>
+      <child>left_wheel</child>
+      <pose>0.0 0.08 0.023 -1.57 0 0</pose>
+      <axis>
+        <xyz>0 1 0</xyz>
+      </axis>
+    </joint>
+
+    <joint name="right_wheel_joint" type="revolute">
+      <parent>base</parent>
+      <child>right_wheel</child>
+      <pose>0.0 -0.08 0.023 -1.57 0 0</pose>
+      <axis>
+        <xyz>0 1 0</xyz>
+      </axis>
+    </joint>
+
+    <joint name="lidar_joint" type="fixed">
+      <parent>base</parent>
+      <child>lidar</child>
+      <pose>-0.032 0 0.171 0 0 0</pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <use_parent_model_frame>true</use_parent_model_frame>
+      </axis>
+    </joint>
+
+    <!-- Demo payloads added around the upstream TurtleBot3 Burger model. -->
+    <link name="fiducial">
+      <pose>0 0 0.20 0 0 0</pose>
+      <visual name="marker">
+        <geometry><box><size>0.16 0.16 0.01</size></box></geometry>
+        <material><ambient>0.95 0.95 0.10 1</ambient><diffuse>0.95 0.95 0.10 1</diffuse></material>
+      </visual>
+    </link>
+    <joint name="fiducial_joint" type="fixed"><parent>base</parent><child>fiducial</child></joint>
+
+    <link name="camera_link">
+      <pose>0.06 0 0.16 0 0 0</pose>
+      <sensor name="front_camera" type="camera">
+        <always_on>true</always_on>
+        <update_rate>20</update_rate>
+        <visualize>false</visualize>
+        <camera>
+          <horizontal_fov>1.047198</horizontal_fov>
+          <image><width>640</width><height>480</height><format>R8G8B8</format></image>
+          <clip><near>0.05</near><far>20.0</far></clip>
+        </camera>
+        <plugin name="front_camera_ros" filename="libgazebo_ros_camera.so">
+          <robotNamespace>/ugv_0</robotNamespace>
+          <cameraName>camera</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>ugv_0/camera_link</frameName>
+        </plugin>
+      </sensor>
+    </link>
+    <joint name="camera_joint" type="fixed"><parent>base</parent><child>camera_link</child></joint>
+
+    <plugin name="diff_drive" filename="libgazebo_ros_diff_drive.so">
+      <robotNamespace>/ugv_0</robotNamespace>
+      <alwaysOn>true</alwaysOn><updateRate>50</updateRate>
+      <leftJoint>left_wheel_joint</leftJoint><rightJoint>right_wheel_joint</rightJoint>
+      <wheelSeparation>0.16</wheelSeparation><wheelDiameter>0.066</wheelDiameter>
+      <wheelTorque>4</wheelTorque><wheelAcceleration>3.0</wheelAcceleration>
+      <commandTopic>cmd_vel</commandTopic><odometryTopic>odom</odometryTopic>
+      <odometryFrame>ugv_0/odom</odometryFrame><robotBaseFrame>ugv_0/base_link</robotBaseFrame>
+      <publishOdomTF>true</publishOdomTF><publishWheelTF>false</publishWheelTF>
+      <odometrySource>encoder</odometrySource><legacyMode>false</legacyMode>
+    </plugin>
+
+    <plugin name="relative_pose_sensor" filename="librelative_pose_sensor_plugin.so">
+      <camera_model_name>iris_0</camera_model_name><camera_link_name>D435i::link</camera_link_name>
+      <marker_link_name>fiducial</marker_link_name><camera_frame>iris_0/camera_link</camera_frame>
+      <observation_topic>/iris_0/ugv_observation</observation_topic><update_rate>15.0</update_rate>
+      <max_distance>8.0</max_distance><horizontal_fov>1.047198</horizontal_fov><vertical_fov>0.785398</vertical_fov>
+      <position_stddev>0.0</position_stddev><orientation_stddev>0.0</orientation_stddev>
+    </plugin>
+  <static>0</static>
+  </model>
+</sdf>

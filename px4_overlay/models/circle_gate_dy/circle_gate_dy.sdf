@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <actor name="animated_box">
+    <static>false</static>
+	<link name="box_link">
+	  <visual name="visual">
+	    <geometry>
+	      <mesh>
+            <uri>model://circle_gate/meshes/circle.stl</uri>
+	      </mesh>
+	    </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Red</name>
+          </script>
+        </material>
+	  </visual>
+	</link>
+
+	<script>
+	  <loop>true</loop>
+	  <auto_start>true</auto_start>
+	  <trajectory id="0" type="square">
+	    <waypoint>
+		  <time>0.0</time>
+		  <pose>1 -1 1 0 0 0</pose>
+	    </waypoint>
+	    <waypoint>
+		  <time>2.0</time>
+		  <pose>1 1 1 0 0 0</pose>
+	    </waypoint>
+	    <waypoint>
+		  <time>4.0</time>
+		  <pose>1 -1 1 0 0 0</pose>
+	    </waypoint>
+	    <!--<waypoint>
+		  <time>3.0</time>
+		  <pose>1 -1 1 0 0 0</pose>
+	    </waypoint>
+	    <waypoint>
+		  <time>4.0</time>
+		  <pose>-1 -1 1 0 0 0</pose>
+	    </waypoint>-->
+	  </trajectory>
+	</script>
+  </actor>
+</sdf>

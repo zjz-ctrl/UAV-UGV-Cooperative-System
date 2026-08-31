@@ -1,0 +1,65 @@
+uav_odom_topic: /iris_0/mavros/local_position/odom
+ugv_odom_topic: /ugv_0/odom
+observation_topic: /air_ground/charuco/observation
+# Input message frames are distinct from the output TF aliases below.
+uav_odom_input_parent_frame: map
+uav_odom_input_child_frame: base_link
+ugv_odom_input_parent_frame: ugv_0/odom
+ugv_odom_input_child_frame: ugv_0/base_link
+observation_input_frame: iris_0/nadir_camera_optical_frame
+origin_frame: air_ground_origin
+uav_odom_frame: iris_0/odom
+uav_base_frame: iris_0/base_link
+ugv_odom_frame: ugv_0/odom
+ugv_base_frame: ugv_0/base_link
+nadir_camera_frame: iris_0/nadir_camera_optical_frame
+minimum_origin_samples: 30
+minimum_samples: 20
+sample_period: 0.10
+max_odom_bracket: 0.08
+registration_mode: one_shot
+registration_window_seconds: 3.0
+registration_window_max_samples: 60
+periodic_update_seconds: 30.0
+degraded_covariance_trace_threshold: 0.25
+max_translation_residual: 0.12
+max_yaw_residual: 0.03
+minimum_translation_sigma: 0.01
+minimum_yaw_sigma: 0.005
+# PROVISIONAL, NOT FIELD-CALIBRATED. Dataset/version/date provenance is not yet
+# available. Before held-out evaluation, estimate these six rates from no-update
+# intervals by constrained nonnegative regression, record dataset/version/date,
+# and freeze them; never retune against mission success. Translation rates add
+# equally to tx/ty variance and yaw rates add to yaw variance for x=[tx, ty, yaw].
+# m^2/s: translation drift variance accumulated per elapsed second.
+translation_time_variance_rate: 0.0004
+# m^2/m: translation drift variance accumulated per metre of UAV travel.
+translation_uav_distance_variance_rate: 0.0009
+# m^2/m: translation drift variance accumulated per metre of UGV travel.
+translation_ugv_distance_variance_rate: 0.0016
+# rad^2/s: relative-yaw drift variance accumulated per elapsed second.
+yaw_time_variance_rate: 0.000025
+# rad^2/m: relative-yaw drift variance accumulated per metre of UAV travel.
+yaw_uav_distance_variance_rate: 0.000049
+# rad^2/m: relative-yaw drift variance accumulated per metre of UGV travel.
+yaw_ugv_distance_variance_rate: 0.0001
+# PROVISIONAL chi2.ppf(0.99, df=3), with no field dataset/version/date yet.
+# Check held-out NIS coverage against this frozen 99% quantile; calibrate and
+# record provenance before M2 trials, never tuning against mission success.
+innovation_mahalanobis_threshold: 11.344866730144373
+# PX4 and the differential-drive odometry both use the Gazebo ENU position axes.
+# Magnetometer heading bias affects the UAV attitude estimate, not those position axes.
+align_origin_to_uav_heading: false
+fixed_origin_yaw: 0.0
+use_visual_frame_yaw: true
+fixed_frame_yaw: 0.0
+minimum_uav_height: 1.2
+maximum_uav_speed: 0.10
+maximum_uav_angular_speed: 0.10
+maximum_ugv_speed: 0.03
+# base_link -> nadir optical frame, FLU to standard downward optical convention
+uav_base_to_camera_translation: [0.0, 0.0, -0.17]
+uav_base_to_camera_rpy: [3.14159265, 0.0, -1.5707963]
+# base_link -> OpenCV ChArUco origin for the current non-mirrored texture.
+ugv_base_to_board_translation: [-0.3125, -0.1875, 0.115]
+ugv_base_to_board_rpy: [0.0, 0.0, 0.0]

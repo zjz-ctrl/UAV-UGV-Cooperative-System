@@ -1,0 +1,31 @@
+<launch>
+  <arg name="gui" default="true"/>
+  <arg name="start_rviz" default="true"/>
+  <arg name="world" default="$(find mavlink_sitl_gazebo)/worlds/empty.world"/>
+
+  <include file="$(find air_ground_bringup)/launch/mvp_system.launch">
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="start_ego" value="false"/>
+    <arg name="start_cxr" value="true"/>
+    <arg name="auto_takeoff" value="false"/>
+    <arg name="start_coordinate_transform" value="false"/>
+    <arg name="start_world_boundaries" value="false"/>
+    <arg name="start_rviz" value="false"/>
+    <arg name="world" value="$(arg world)"/>
+  </include>
+
+  <node pkg="air_ground_bringup" type="relative_target_estimator.py"
+        name="relative_target_estimator" output="screen">
+    <rosparam param="ugv_base_to_marker_translation">[0.18, 0.0, 0.26]</rosparam>
+  </node>
+  <node pkg="air_ground_bringup" type="ugv_patrol.py" name="ugv_patrol" output="screen"/>
+  <node pkg="air_ground_bringup" type="camera_mosaic.py" name="camera_mosaic" output="screen"/>
+  <node pkg="air_ground_bringup" type="uav_follow_mission.py"
+        name="uav_follow_mission" output="screen">
+    <param name="follow_back" value="4.0"/>
+  </node>
+  <node if="$(arg start_rviz)" pkg="rviz" type="rviz" name="air_ground_demo_rviz"
+        args="-d $(find air_ground_bringup)/rviz/mvp.rviz" output="screen"/>
+  <node if="$(arg start_rviz)" pkg="rviz" type="rviz" name="air_ground_camera_rviz"
+        args="-d $(find air_ground_bringup)/rviz/camera_view.rviz" output="screen"/>
+</launch>

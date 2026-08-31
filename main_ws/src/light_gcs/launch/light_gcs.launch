@@ -1,0 +1,18 @@
+<launch>
+    <!-- D435i RGB 图像话题 -->
+    <!-- 实机常见：/camera/color/image_raw -->
+    <!-- 仿真常见：/iris_D435i/realsense/depth_camera/color/image_raw -->
+
+    <arg name="image_topic" default="/camera/color/image_raw"/>
+    <arg name="cmd_topic" default="/position_cmd"/>
+
+    <node pkg="light_gcs"
+          type="light_gcs.py"
+          name="light_gcs"
+          output="screen">
+        <param name="image_topic" value="$(arg image_topic)"/>
+        <param name="cmd_topic" value="$(arg cmd_topic)"/>
+        <param name="publish_rate" value="30.0"/>
+    </node>
+</launch>
+

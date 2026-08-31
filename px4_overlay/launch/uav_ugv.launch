@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- UAV + UGV joint SITL simulation for coordinate sharing -->
+    <!-- uav0: iris with downward monocular camera (SYSID 1, QGC auto-connect) -->
+    <!-- ugv1: r1_rover with rooftop AprilTag (SYSID 2, QGC auto-connect) -->
+    <arg name="world" default="$(find mavlink_sitl_gazebo)/worlds/empty.world"/>
+    <arg name="gui" default="true"/>
+    <arg name="est" default="ekf2"/>
+
+    <env name="GAZEBO_MODEL_PATH" value="$(find mavlink_sitl_gazebo)/models:$(optenv GAZEBO_MODEL_PATH)"/>
+
+    <!-- Gazebo -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="gui" value="$(arg gui)"/>
+        <arg name="world_name" value="$(arg world)"/>
+        <arg name="verbose" value="true"/>
+    </include>
+
+    <!-- ==================== UAV0: iris_downcam ==================== -->
+    <group ns="uav0">
+        <arg name="ID" value="0"/>
+        <arg name="fcu_url" default="udp://:14540@localhost:14580"/>
+        <!-- PX4 SITL and vehicle spawn -->
+        <include file="$(find px4)/launch/spawn_vehicle.launch">
+            <arg name="vehicle" value="iris_downcam"/>
+            <arg name="sim_model" value="iris"/>
+            <arg name="ID" value="$(arg ID)"/>
+            <arg name="x" value="0"/>
+            <arg name="y" value="0"/>
+            <arg name="z" value="0.5"/>
+            <arg name="mavlink_tcp_port" value="4560"/>
+            <arg name="mavlink_udp_port" value="14560"/>
+            <arg name="gst_udp_port" value="$(eval 5600 + arg('ID'))"/>
+            <arg name="video_uri" value="$(eval 5600 + arg('ID'))"/>
+            <arg name="mavlink_cam_udp_port" value="$(eval 14530 + arg('ID'))"/>
+        </include>
+        <!-- MAVROS -->
+        <include file="$(find mavros)/launch/px4.launch">
+            <arg name="fcu_url" value="$(arg fcu_url)"/>
+            <arg name="gcs_url" value=""/>
+            <arg name="tgt_system" value="$(eval 1 + arg('ID'))"/>
+            <arg name="tgt_component" value="1"/>
+        </include>
+    </group>
+
+    <!-- ==================== UGV1: r1_rover_tag ==================== -->
+    <group ns="ugv1">
+        <arg name="ID" value="1"/>
+        <arg name="fcu_url" default="udp://:14541@localhost:14581"/>
+        <!-- PX4 SITL and vehicle spawn -->
+        <include file="$(find px4)/launch/spawn_vehicle.launch">
+            <arg name="vehicle" value="r1_rover_tag"/>
+            <arg name="sim_model" value="r1_rover"/>
+            <arg name="ID" value="$(arg ID)"/>
+            <arg name="x" value="1.5"/>
+            <arg name="y" value="0"/>
+            <arg name="z" value="0.05"/>
+            <arg name="Y" value="0"/>
+            <arg name="mavlink_tcp_port" value="4561"/>
+            <arg name="mavlink_udp_port" value="14561"/>
+            <arg name="gst_udp_port" value="$(eval 5600 + arg('ID'))"/>
+            <arg name="video_uri" value="$(eval 5600 + arg('ID'))"/>
+            <arg name="mavlink_cam_udp_port" value="$(eval 14530 + arg('ID'))"/>
+        </include>
+        <!-- MAVROS -->
+        <include file="$(find mavros)/launch/px4.launch">
+            <arg name="fcu_url" value="$(arg fcu_url)"/>
+            <arg name="gcs_url" value=""/>
+            <arg name="tgt_system" value="$(eval 1 + arg('ID'))"/>
+            <arg name="tgt_component" value="1"/>
+        </include>
+    </group>
+</launch>

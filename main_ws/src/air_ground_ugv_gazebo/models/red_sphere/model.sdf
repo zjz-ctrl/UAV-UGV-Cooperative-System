@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <model name="red_sphere">
+    <static>true</static>
+    <link name="link">
+      <collision name="collision"><geometry><sphere><radius>0.25</radius></sphere></geometry></collision>
+      <visual name="visual">
+        <geometry><sphere><radius>0.25</radius></sphere></geometry>
+        <material><ambient>0.85 0.02 0.02 1</ambient><diffuse>0.95 0.03 0.03 1</diffuse><specular>0 0 0 1</specular></material>
+      </visual>
+    </link>
+  </model>
+</sdf>

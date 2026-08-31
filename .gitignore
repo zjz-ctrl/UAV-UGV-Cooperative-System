@@ -1,0 +1,33 @@
+# ===== ROS 构建产物 =====
+main_ws/build/
+main_ws/devel/
+main_ws/install/
+main_ws/log/
+__pycache__/
+*.pyc
+*.pyo
+
+# ===== 独立 Git 仓(PX4 自管, 见 EXTERNAL.md) =====
+PX4-Autopilot/
+
+# ===== 参考/部署工程(各自独立, 不入顶层仓) =====
+reference/
+deploy/CarMavlink/
+
+# ===== 历史归档与日志 =====
+archive/
+logs/
+
+# ===== ROS 数据与大文件 =====
+*.bag
+*.bag.active
+*.pth
+*.pt
+*.onnx
+*.engine
+
+# ===== IDE / 备份 =====
+.vscode/
+.idea/
+*.bak
+*~

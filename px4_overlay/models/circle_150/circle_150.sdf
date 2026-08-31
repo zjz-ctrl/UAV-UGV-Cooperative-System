@@ -1,0 +1,91 @@
+<sdf version='1.6'>
+  <model name='circle_150'>
+    <link name='base_link'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>-0.003255 0 -0.295296 0 -0 0</pose>
+        <mass>12.2765</mass>
+        <inertia>
+          <ixx>7.18375</ixx>
+          <ixy>-1.51086e-14</ixy>
+          <ixz>0.0574015</ixz>
+          <iyy>4.99872</iyy>
+          <iyz>-3.89888e-16</iyz>
+          <izz>2.19543</izz>
+        </inertia>
+      </inertial>
+      <collision name='base_link_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://circle_150/meshes/base_link.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <collision name='base_link_fixed_joint_lump__pillar_collision_1'>
+        <pose frame=''>0 0 -1.3 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://circle_150/meshes/pillar.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <collision name='base_link_fixed_joint_lump__rect_collision_2'>
+        <pose frame=''>0 0 -0.95 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://circle_150/meshes/rect.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='base_link_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://circle_150/meshes/base_link.STL</uri>
+          </mesh>
+        </geometry>
+	<material>
+          <script>
+            <uri>__default__</uri>
+            <name>Gazebo/Red</name>
+            </script>
+        </material> 
+      </visual>
+      <visual name='base_link_fixed_joint_lump__pillar_visual_1'>
+        <pose frame=''>0 0 -1.3 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://circle_150/meshes/pillar.STL</uri>
+          </mesh>
+        </geometry>
+	<material>
+          <script>
+            <uri>__default__</uri>
+            <name>Gazebo/Black</name>
+            </script>
+        </material> 
+      </visual>
+      <visual name='base_link_fixed_joint_lump__rect_visual_2'>
+        <pose frame=''>0 0 -0.95 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://circle_150/meshes/rect.STL</uri>
+          </mesh>
+        </geometry>
+	<material>
+          <script>
+            <uri>__default__</uri>
+            <name>Gazebo/Yellow</name>
+            </script>
+        </material> 
+      </visual>
+    </link>
+  </model>
+</sdf>
