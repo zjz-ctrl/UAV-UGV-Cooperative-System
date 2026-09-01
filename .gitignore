@@ -7,8 +7,8 @@ __pycache__/
 *.pyc
 *.pyo
 
-# ===== 独立 Git 仓(PX4 自管, 见 EXTERNAL.md) =====
-PX4-Autopilot/
+# ===== 独立 Git 仓(已合并到主仓) =====
+# PX4-Autopilot/
 
 # ===== 参考/部署工程(各自独立, 不入顶层仓) =====
 reference/

@@ -13,6 +13,16 @@ ROOT="${UAV_UGV_ROOT:-$HOME/UAV-UGV_ws}"
 LOG_DIR="$ROOT/logs"; mkdir -p "$LOG_DIR"
 LOG="$LOG_DIR/build_all_$(date +%Y%m%d_%H%M%S).log"
 
+if [ ! -d "$ROOT/PX4-Autopilot" ]; then
+  echo "[ERROR] PX4-Autopilot 目录不存在: $ROOT/PX4-Autopilot"
+  echo "[ERROR] 请先克隆 PX4 并切到 sdu/uav-ugv-overlay 分支:"
+  echo "        cd $ROOT"
+  echo "        git clone https://github.com/PX4/PX4-Autopilot.git"
+  echo "        cd PX4-Autopilot && git checkout sdu/uav-ugv-overlay"
+  echo "        git submodule update --init --recursive"
+  exit 1
+fi
+
 echo "[PX4 BUILD] start (log: $LOG)"
 ( cd "$ROOT/PX4-Autopilot" \
   && make px4_sitl_default \
